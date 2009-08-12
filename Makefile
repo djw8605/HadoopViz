@@ -76,7 +76,7 @@ clean:
 
 install: hadoopviz
 	install -m 755 -d $(DESTDIR)/usr/local/bin/
-	install -m 755 hadoopviz $(DESTDIR)/usr/local/bin/
+	install -m 755 hadoopviz $(DESTDIR)/usr/local/bin/hadoopviz
 
 
 
