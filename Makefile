@@ -75,7 +75,7 @@ clean:
 	rm -f $(OBJS)
 
 install: hadoopviz
-	install -m 755 $(DESTDIR)/usr/local/bin/
+	install -m 755 -d $(DESTDIR)/usr/local/bin/
 	install -m 755 hadoopviz $(DESTDIR)/usr/local/bin/
 
 
