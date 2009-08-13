@@ -23,7 +23,7 @@ void usage()
             "Usage: hadoopviz <options>\n"
             "\t-s, --server SERVER\tOverride the default server (%s)\n"
             "\t-p, --port PORT\t\tOverride the default server port (%i)\n"
-    		"\t-a, --datadir DATADIR\tThe datadir with textures/ and fonts/ directory\n"
+            "\t-a, --datadir DATADIR\tThe datadir with textures/ and fonts/ directory\n"
             "\n", DEFAULT_SERVER, DEFAULT_PORT);
 
 

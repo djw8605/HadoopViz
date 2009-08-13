@@ -77,6 +77,7 @@ clean:
 install: hadoopviz
 	install -m 755 -d $(DESTDIR)/$(BINDIR)
 	install -m 755 hadoopviz.start $(DESTDIR)/$(BINDIR)/hadoopviz
+	install -m 755 -d $(DESTDIR)/$(LIBEXECDIR)
 	install -m 755 hadoopviz $(DESTDIR)/$(LIBEXECDIR)/hadoopviz
 	install -m 755 -d $(DESTDIR)/$(DATADIR)/hadoopviz/textures/
 	install -m 755 -d $(DESTDIR)/$(DATADIR)/hadoopviz/fonts/
