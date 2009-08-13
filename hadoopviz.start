@@ -7,5 +7,5 @@ then
 	args="--datadir $datadir"
 fi
 
-echo /usr/libexec/hadoopviz $args $@
+/usr/libexec/hadoopviz $args $@
 

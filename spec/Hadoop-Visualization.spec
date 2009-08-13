@@ -1,6 +1,8 @@
+%define realrelease 2
+
 Name:           Hadoop-Visualization
-Version:        0.0.2
-Release:        1%{?dist}
+Version:        0.0.1
+Release:        %{realrelease}%{?dist}
 Summary:        A program that visualized the data movement through a Hadoop DFS pool.
 
 Group:          Amusements/Graphics
@@ -36,8 +38,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc
 %{_bindir}/hadoopviz
-%{_libexecdir}/hadoopviz
-%{_datadir}/hadoopviz/*
+%{_libexecdir}/*
+%{_datadir}/*
 
 %changelog
 
