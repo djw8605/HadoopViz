@@ -80,7 +80,7 @@ install: hadoopviz
 	install -m 755 hadoopviz $(DESTDIR)/$(LIBEXECDIR)/hadoopviz
 	install -m 755 -d $(DESTDIR)/$(DATADIR)/hadoopviz/textures/
 	install -m 755 -d $(DESTDIR)/$(DATADIR)/hadoopviz/fonts/
-	
+	install -m 644 fonts/Test.ttf $(DESTDIR)/$(DATADIR)/hadoopviz/fonts/Test.ttf
 
 
 
