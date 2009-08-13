@@ -7,6 +7,7 @@
 #include <assert.h>
 
 #include <iostream>
+#include <sstream>
 
 
 #include "display.h"
@@ -21,6 +22,8 @@
 #endif
 
 #include "HadoopDropper/HadoopDropper.h"
+
+extern char* dataDir;
 
 struct SceneNode {
     AbstractScene* scene;
@@ -244,7 +247,9 @@ void DisplayReshape() {
 		delete font;
 		try {
 			font = new freetype::font_data;
-			font->init("FreeType/Test.ttf", 16);
+			stringstream ss;
+			ss << dataDir << "/fonts/Test.ttf";
+			font->init(ss.str().c_str(), 16);
 		} catch (std::exception &e) {
 			printf("%s\n", e.what());
 		}

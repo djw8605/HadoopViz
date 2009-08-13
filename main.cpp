@@ -14,6 +14,7 @@
 
 char* serverHost;
 short serverPort;
+char* dataDir;
 
 
 void usage()
@@ -22,6 +23,7 @@ void usage()
             "Usage: hadoopviz <options>\n"
             "\t-s, --server SERVER\tOverride the default server (%s)\n"
             "\t-p, --port PORT\t\tOverride the default server port (%i)\n"
+    		"\t-a, --datadir DATADIR\tThe datadir with textures/ and fonts/ directory\n"
             "\n", DEFAULT_SERVER, DEFAULT_PORT);
 
 
@@ -38,17 +40,23 @@ int main(int argc, char *argv[])
         serverHost[strlen(DEFAULT_SERVER)] = '\0';
         serverPort = DEFAULT_PORT;
 
+        dataDir = new char[strlen(DEFAULT_DATADIR)+1];
+        strcpy(dataDir, DEFAULT_DATADIR);
+        dataDir[strlen(DEFAULT_DATADIR)] = '\0';
+
+
 
 	/* Process Arguments */
 
 	//int option_char;
 
-	const char* short_options = "hs:p:";
+	const char* short_options = "hs:p:t:";
 	static struct option long_options[] =
 	    {
 	            {"help", no_argument, 0, 'h'},
 	            {"server", required_argument, 0, 's'},
 	            {"port", required_argument, 0, 'p'},
+	            {"datadir", required_argument, 0, 'a'},
 	            {0, 0, 0, 0}
 	    };
 
@@ -94,6 +102,14 @@ int main(int argc, char *argv[])
 	        {
 	            printf("Port invalid: %s\n", optarg);
 	        }
+
+	    case 'a':
+	    	if(dataDir)
+	    		delete dataDir;
+	    	dataDir = new char[strlen(optarg)+1];
+	    	strcpy(dataDir, optarg);
+	    	dataDir[strlen(optarg)] = '\0';
+	    	break;
 
 	    case '?':
 	        break;
