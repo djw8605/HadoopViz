@@ -1,0 +1,11 @@
+#!/bin/sh
+
+datadir=/usr/share/hadoopviz
+
+if [ -d $datadir ]
+then
+	args="--datadir $datadir"
+fi
+
+echo /usr/libexec/hadoopviz $args $@
+

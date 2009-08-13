@@ -1,6 +1,6 @@
 Name:           Hadoop-Visualization
 Version:        0.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A program that visualized the data movement through a Hadoop DFS pool.
 
 Group:          Amusements/Graphics
@@ -25,7 +25,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make DESTDIR=$RPM_BUILD_ROOT BINDIR=%{_bindir} install
+make DESTDIR=$RPM_BUILD_ROOT BINDIR=%{_bindir} DATADIR=%{_datadir} install
 
 
 %clean
@@ -36,6 +36,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc
 %{_bindir}/hadoopviz
-
+%{_libexecdir}/hadoopviz
+%{_datadir}/hadoopviz/*
 
 %changelog
+
+
