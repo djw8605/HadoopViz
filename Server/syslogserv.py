@@ -270,10 +270,10 @@ class SysLogServ(object):
             if gridftparr is None:
                 return
             if gridftparr[2] == "READ":
-                operation = "drop"
+                operation = "float"
                 #print "Sending Drop"
             elif gridftparr[2] == "WRITE":
-                operation = "float"
+                operation = "drop"
                 #print "Sending float"
             else:
                 print "Unknown GRIDFTP operation: %s" % gridftparr[2]
