@@ -55,7 +55,7 @@ DropListener::DropListener()
 DropListener::~DropListener()
 {
     // TODO Auto-generated destructor stub
-    //close(sock);
+    close(this->sock);
 
 }
 

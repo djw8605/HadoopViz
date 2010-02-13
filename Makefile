@@ -7,14 +7,14 @@ FREETYPE_LIBS = $(shell freetype-config --libs)
 
 SDL_CFLAGS = $(shell sdl-config --cflags)
 SDL_LIBS = $(shell sdl-config --libs)
-
+#SDL_LIBS = -lSDLmain -lSDL
 
 
 INCLUDES =  -I.
 
 CPPFLAGS =  -Wall -g -fPIC -funroll-loops $(INCLUDES) $(FREETYPE_CFLAGS) $(LIB3DS_CFLAGS) $(SDL_CFLAGS) -DNO_AUDIO
 CXXFLAGS = 
-LIBS = -lm -lGL -lGLU $(FREETYPE_LIBS) $(LIB3DS_LIBS) $(SDL_LIBS) # -lSDL_mixer
+LIBS = -g -lm $(FREETYPE_LIBS) $(LIB3DS_LIBS) $(SDL_LIBS) -framework OpenGL# -lSDL_mixer
 LDFLAGS = 
 
 CXX = g++
