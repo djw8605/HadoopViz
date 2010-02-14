@@ -9,12 +9,18 @@ SDL_CFLAGS = $(shell sdl-config --cflags)
 SDL_LIBS = $(shell sdl-config --libs)
 #SDL_LIBS = -lSDLmain -lSDL
 
+OS = $(shell uname -s)
+
+ifeq ($(OS), Darwin)
+  OSLIBS = -framework OpenGL
+endif
+
 
 INCLUDES =  -I.
 
 CPPFLAGS =  -Wall -g -fPIC -funroll-loops $(INCLUDES) $(FREETYPE_CFLAGS) $(LIB3DS_CFLAGS) $(SDL_CFLAGS) -DNO_AUDIO
 CXXFLAGS = 
-LIBS = -g -lm $(FREETYPE_LIBS) $(LIB3DS_LIBS) $(SDL_LIBS) -framework OpenGL# -lSDL_mixer
+LIBS = -g -lm $(FREETYPE_LIBS) $(LIB3DS_LIBS) $(SDL_LIBS) $(OSLIBS) # -lSDL_mixer
 LDFLAGS = 
 
 CXX = g++
