@@ -190,7 +190,7 @@ class SysLogServ(object):
     def InitRegex(self):
         self.srcregex = re.compile('src:')
         self.destregex = re.compile('dest:')
-        self.clientregex = re.compile('.*<\d+>([\w]+ \d{2,2} \d{2,2}:\d{2,2}:\d{2,2}).*INFO.*DataNode\.clienttrace: src: /([\d\./]+):\d+, dest: /([\d\./]+):\d+, bytes: (\d+), op: (\w+)')
+        self.clientregex = re.compile('.*<\d+>([\w]+\s+\d{1,2} \d{2,2}:\d{2,2}:\d{2,2}).*INFO.*DataNode\.clienttrace: src: /([\d\./]+):\d+, dest: /([\d\./]+):\d+, bytes: (\d+), op: (\w+)')
         self.receiveblock = re.compile('Receiving block')
         self.gridftp = re.compile("GRIDFTP")
         
