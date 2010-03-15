@@ -307,7 +307,7 @@ void Drops::RenderDrop(SingleDrop* s)
     }
     else if (s->type == GLOBUS)
     {
-    	glColor4f(1.0, 1.0, 1.0, 1.0);
+    	glColor4f(1.0, 1.0, 0.0, 1.0);
     	glBegin(GL_LINES);
     	glVertex3f(s->src.x,s->src.y, s->src.z);
     	glVertex3f(s->dest.x, s->dest.y, s->dest.z);

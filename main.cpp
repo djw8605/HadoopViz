@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     //SDL_Surface* screen = SDL_SetVideoMode(640, 480, 0, SDL_OPENGL | SDL_RESIZABLE);
 	SDL_SetVideoMode(640, 480, 0, SDL_OPENGL | SDL_RESIZABLE);
-	SDL_WM_SetCaption("HadoopViz","HadoopViz");
+	SDL_WM_SetCaption("SecViz","SecViz");
     init();
 
     SDL_Event event;

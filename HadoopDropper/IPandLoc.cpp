@@ -11,6 +11,7 @@
 
 #include "IPandLoc.h"
 #define EXP_DECAY 0.985
+#define MAX_LOAD 300.0
 
 IPandLoc::IPandLoc()
 {
@@ -109,10 +110,19 @@ void IPandLoc::ExpDecayLoad()
 void IPandLoc::AddLoad(float amount)
 {
 
-	this->m_load = fmin(510.0, m_load+3*amount);
+	this->m_load = fmin(MAX_LOAD, m_load+3*amount);
 
 	//if(this->m_load > 500)
 		//printf("%lf += %lf\n", this->m_load, amount);
 	//printf("adding %lf\n", amount);
 }
+
+
+float IPandLoc::GetMaxLoad()
+{
+
+	return MAX_LOAD;
+
+}
+
 

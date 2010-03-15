@@ -60,7 +60,6 @@ void HadoopDropper::Render()
     float buf[3];
     _camera->GetPosition(buf);
     _camera->SetCameraLocation(buf[0], buf[1], buf[2], 0, 0,  0);
-
     glPushMatrix();
 
 
@@ -86,6 +85,7 @@ void HadoopDropper::Init()
     _camera->SetCameraLocation(0.0, -100.0, 10.0, AREA_SIZE / 2, AREA_SIZE / 2,
             10.0);
     _camera->Rotate(ROTATE_SPEED);
+    _camera->ModifyRotationRadius(150.0);
     //printf("after camera set\n");
     int width = SDL_GetVideoSurface()->w; //glutGet(GLUT_WINDOW_WIDTH);
     int height = SDL_GetVideoSurface()->h; //glutGet(GLUT_WINDOW_WIDTH);
@@ -379,6 +379,11 @@ void HadoopDropper::Reset()
 
 void HadoopDropper::RenderNodes()
 {
+	int max_load = 0;
+	if (_iploc->GetSize() > 0)
+		max_load = _iploc->GetInfo(0).GetMaxLoad();
+
+
 	for (int i = 0; i < _iploc->GetSize(); i++)
 	{
 
@@ -389,9 +394,11 @@ void HadoopDropper::RenderNodes()
 			continue;
 		}
 
+		float load = _iploc->GetLoad(i);
 		point p = _iploc->GetLocation(i);
 		glPushMatrix();
 		glTranslatef(p.x, p.y, p.z);
+		glColor4f(0.0, 1.0, 1.0, load / max_load);
 		glBegin(GL_QUADS);							// Start Drawing Quads
 					// Bottom Face
 					glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);	// Top Right Of The Texture and Quad

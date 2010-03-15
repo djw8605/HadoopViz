@@ -33,6 +33,7 @@ public:
 
     float GetLoad() { return m_load; };
     void AddLoad(float amount);
+    float GetMaxLoad();
     void ExpDecayLoad();
 
 
