@@ -233,7 +233,7 @@ void Drops::RenderDrop(SingleDrop* s)
     /* Movement parts */
     if((s->type == BLOCK_ADD) || (s->type == BLOCK_DEL))
         s->pos[2] = s->pos[2] - getTime() * DROP_SPEED;
-    else if (s->type == PACKET)
+    else if ((s->type == PACKET) || (s->type == GLOBUS))
     {
 
     	s->pos[0] = (s->direction.x * s->counter) + s->src.x;
@@ -287,9 +287,7 @@ void Drops::RenderDrop(SingleDrop* s)
 
     }
 
-    glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    glScalef(0.1, 0.1, 0.1);
+
 
     /* Invert the raindrop */
     if(s->type == FILE_OPEN || s->type == FLOAT)
@@ -297,15 +295,23 @@ void Drops::RenderDrop(SingleDrop* s)
         glScalef(1.0, 1.0, -1.0);
     }
 
-#ifdef USE_VBO
-    if (m_VBOSupported)
-        m_raindrop->Draw();
-    else
-#endif
-    {
 
+    if (s->type == PACKET)
+    {
+    	glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
+    	glColor4f(1.0, 1.0, 1.0, 1.0);
+        glScalef(0.1, 0.1, 0.1);
     	glCallList(m_dropList);
 
+
+    }
+    else if (s->type == GLOBUS)
+    {
+    	glColor4f(1.0, 1.0, 1.0, 1.0);
+    	glBegin(GL_LINES);
+    	glVertex3f(s->src.x,s->src.y, s->src.z);
+    	glVertex3f(s->dest.x, s->dest.y, s->dest.z);
+    	glEnd();
 
     }
     //glutSolidSphere(1.0, 5, 5);
