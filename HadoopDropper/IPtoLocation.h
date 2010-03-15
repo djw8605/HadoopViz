@@ -30,6 +30,7 @@ public:
     void ExpDecayLoads();
     IPandLoc GetInfo(unsigned int position);
     float GetLoad(unsigned int position);
+    void RemoveNode(unsigned int position);
 
     IPandLoc& GetByIP(char* ip);
     IPandLoc& GetByIP(char* ip, float load_mod);

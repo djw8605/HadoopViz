@@ -9,7 +9,7 @@
 #define SINGLEDROP_H_
 
 #include "Math/Math.h"
-enum DropType { BLOCK_ADD, FILE_OPEN, BLOCK_DEL, CLIENT_TRACE, RECV_BLOCK, DROP, FLOAT };
+enum DropType { BLOCK_ADD, FILE_OPEN, BLOCK_DEL, CLIENT_TRACE, RECV_BLOCK, DROP, FLOAT, SSH, PACKET, GLOBUS };
 
 class SingleDrop
 {

@@ -27,6 +27,7 @@ public:
 
 private:
     void RenderFloor();
+    void RenderNodes();
     void RenderSelected();
     void InitDisplayLists();
     Drops* drops;

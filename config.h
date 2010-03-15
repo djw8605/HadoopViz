@@ -12,7 +12,7 @@
 
 /* Default Values */
 #define DEFAULT_SERVER "derek.unl.edu"
-#define DEFAULT_PORT 5679
+#define DEFAULT_PORT 9345
 #define DEFAULT_DATADIR "./"
 
 

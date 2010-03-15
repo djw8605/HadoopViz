@@ -229,10 +229,18 @@ void Drops::RenderDrop(SingleDrop* s)
 */
 
     glPushMatrix();
-
+    s->counter = s->counter + (getTime() * DROP_SPEED);
     /* Movement parts */
     if((s->type == BLOCK_ADD) || (s->type == BLOCK_DEL))
         s->pos[2] = s->pos[2] - getTime() * DROP_SPEED;
+    else if (s->type == PACKET)
+    {
+
+    	s->pos[0] = (s->direction.x * s->counter) + s->src.x;
+    	s->pos[1] = (s->direction.y * s->counter) + s->src.y;
+    	s->pos[2] = (s->direction.z * s->counter) + s->src.z;
+
+    }
     else if (s->type == FILE_OPEN)
     {
         s->pos[2] = s->pos[2] + getTime() * DROP_SPEED;

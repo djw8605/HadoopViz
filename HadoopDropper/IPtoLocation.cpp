@@ -72,9 +72,12 @@ void IPtoLocation::AddIP(char* ip)
     static int counter = 0;
     /* initialize the point */
     point p;
-    p.x = (counter / AREA_SIZE) * SPACE_BETWEEN;
-    p.y = (counter % AREA_SIZE);
-    p.z = 0;
+    //p.x = (counter / AREA_SIZE) * SPACE_BETWEEN;
+    //p.y = (counter % AREA_SIZE);
+    //p.z = 0;
+    p.x = (rand() % 100) - 50;
+    p.y = (rand() % 100) - 50;
+    p.z = (rand() % 100) - 50;
     IPandLoc iploc(ip, p);
     ips.push_back(iploc);
     //printf("%lf, %lf, %i\n", p.x, p.y, counter);
@@ -118,6 +121,14 @@ void IPtoLocation::ExpDecayLoads()
 			printf("%s: Load = %lf\n", (*i).GetIP(), (*i).GetLoad());
 */
 	}
+
+}
+
+void IPtoLocation::RemoveNode(unsigned int position)
+{
+	std::vector<IPandLoc>::iterator i = ips.begin();
+
+	ips.erase(i+position);
 
 }
 

@@ -28,7 +28,7 @@ extern char* serverHost;
 extern short serverPort;
 
 
-#define PORT_NUMBER 5679
+#define PORT_NUMBER 9345
 
 static int CheckReadable(int sock) {
 
@@ -140,9 +140,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
             //printf("src: %s, dest: %s\n", bufsType.src, bufsType.dest);
 
             /* Determine the type */
-            if(strncmp(buf+offset, "recvblock", 9) == 0)
+            if(strncmp(buf+offset, "packet", 6) == 0)
             {
-
+            	//printf("Got Packet\n");
                 TypeInfo bufsType = GetTypeInfo(buf+offset, endofType - buf);
                 /* Create and fill the data structure */
                 sd = new SingleDrop();
@@ -159,7 +159,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 sd->dist = Distance(sd->src, sd->dest);
                 sd->scale =3;
                 //sd->type = RECV_BLOCK;
-                sd->type = CLIENT_TRACE;
+                sd->type = PACKET;
                 sd->counter = 0;
                 sd->direction = ToVector(sd->src, sd->dest);
 
@@ -170,9 +170,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 
 
             }
-            else if (strncmp(buf+offset, "clienttrace", 11) == 0)
+            else if (strncmp(buf+offset, "ssh", 3) == 0)
             {
-
+				//printf("Get ssh\n");
                 TypeInfo bufsType = GetTypeInfo(buf + offset, endofType - buf);
 
                 /* Create and fill the data structure */
@@ -191,7 +191,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 sd->scale = ((float)rand() / RAND_MAX)*1.0+3;
                 //printf("scale: %lf", sd->scale);
                 //sd->scale = 3;
-                sd->type = CLIENT_TRACE;
+                sd->type = SSH;
                 sd->counter = 0;
                 sd->direction = ToVector(sd->src, sd->dest);
 
@@ -199,40 +199,41 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 free(bufsType.dest);
                 free(bufsType.src);
                 (*s).push_back(sd);
-                //Normalize(sd->direction);
-                //printf("src: %lf, %lf, %lf\n", sd->direction.x, sd->direction.y, sd->direction.z);
+				//Normalize(sd->direction);
+				//printf("src: %lf, %lf, %lf\n", sd->direction.x, sd->direction.y, sd->direction.z);
 
-            }
-            else if (strncmp(buf + offset, "drop", 4 ) == 0)
-            {
+			} else if (strncmp(buf + offset, "globus", 6) == 0) {
 
-                TypeInfo bufsType = GetTypeInfo(buf + offset, endofType - buf);
+				//printf("Get ssh\n");
+				TypeInfo bufsType = GetTypeInfo(buf + offset, endofType - buf);
 
-                /* Create and fill the data structure */
-                sd = new SingleDrop();
-                IPandLoc dest = _iploc->GetByIP(bufsType.src, 1.0);
-                //sd->dest = _iploc->GetLocation(bufsType.src);
-                sd->dest = dest.GetPoint();
-                point p;
-                p.x = sd->dest.x;
-                p.y = sd->dest.y;
-                p.z = sd->dest.z+DROP_HEIGHT;
-                sd->src =p;
-                sd->pos[0] = p.x;
-                sd->pos[1] = p.y;
-                sd->pos[2] = p.z;
-                sd->dist = Distance(sd->src, sd->dest);
-                //sd->scale = ((float) rand() / RAND_MAX) * 1.0 + 3;
-                //printf("scale: %lf", sd->scale);
-                //sd->scale = 3;
-                sd->type = DROP;
-                sd->counter = 0;
-                sd->direction = ToVector(sd->src, sd->dest);
+				/* Create and fill the data structure */
+				sd = new SingleDrop();
+				IPandLoc src = _iploc->GetByIP(bufsType.src, 1.0);
+				//src.AddLoad(1.0);
+				IPandLoc dest = _iploc->GetByIP(bufsType.dest, 1.0);
+				//dest.AddLoad(1.0);
+				//printf("%lf\n", dest.GetLoad());
+				sd->dest = dest.GetPoint(); //_iploc->GetLocation(bufsType.dest);
+				sd->src = src.GetPoint(); //_iploc->GetLocation(bufsType.src);
+				sd->pos[0] = sd->src.x;
+				sd->pos[1] = sd->src.y;
+				sd->pos[2] = sd->src.z;
+				sd->dist = Distance(sd->src, sd->dest);
+				sd->scale = ((float) rand() / RAND_MAX) * 1.0 + 3;
+				//printf("scale: %lf", sd->scale);
+				//sd->scale = 3;
+				sd->type = GLOBUS;
+				sd->counter = 0;
+				sd->direction = ToVector(sd->src, sd->dest);
 
-                //free(bufsType.dest);
-                free(bufsType.src);
-                free(bufsType.dest);
-                (*s).push_back(sd);
+				free(bufsType.dest);
+				free(bufsType.src);
+				(*s).push_back(sd);
+				//Normalize(sd->direction);
+				//printf("src: %lf, %lf, %lf\n", sd->direction.x, sd->direction.y, sd->direction.z);
+
+
 
             }
             else if (strncmp(buf + offset, "float", 5) == 0)
