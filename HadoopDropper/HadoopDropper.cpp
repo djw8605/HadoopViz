@@ -590,11 +590,11 @@ void HadoopDropper::RenderSelected()
 {
 
     /* Round to the nearest multiple of SPACE_BETWEEN */
-    int row = (int)round(m_intercept.intPoint.y/SPACE_BETWEEN);
-    int col = (int)round(m_intercept.intPoint.x/SPACE_BETWEEN);
-    static float halveBetween = (float)SPACE_BETWEEN/2.0;
+    //int row = (int)round(m_intercept.intPoint.y/SPACE_BETWEEN);
+    //int col = (int)round(m_intercept.intPoint.x/SPACE_BETWEEN);
+    //static float halveBetween = (float)SPACE_BETWEEN/2.0;
 
-    int tmpSelected = row + col*(AREA_SIZE/SPACE_BETWEEN);
+    //int tmpSelected = row + col*(AREA_SIZE/SPACE_BETWEEN);
     //m_selectedIndex = row + col*(AREA_SIZE/SPACE_BETWEEN);
     //printf("Selected: %i\n", m_selectedIndex);
 
