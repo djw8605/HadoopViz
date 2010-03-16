@@ -22,7 +22,11 @@
 #include "HadoopDropper/SelectionDisplay.h"
 #include "display.h"
 
-
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 #include <stdio.h>
 
 #define ROTATE_SPEED 10.0
@@ -35,6 +39,8 @@ HadoopDropper::HadoopDropper()
     m_cursorOver = false;
     m_floorSize = 0;
     m_totalFloor = 0;
+    this->m_selectHost = 0;
+    this->m_selectIP = 0;
 }
 
 HadoopDropper::~HadoopDropper()
@@ -326,13 +332,20 @@ void HadoopDropper::MouseMove(int x, int y)
         point p = _iploc->GetInfo(i).GetPos();
         point clickBox[4];
         clickBox[0].x = p.x - 1.0; clickBox[0].y = p.y - 1.0; clickBox[0].z = p.z - 1.0;
-        clickBox[1].x = p.x - 1.0; clickBox[1].y = p.y + 1.0; clickBox[1].z = p.z - 1.0;
+        clickBox[1].x = p.x - 1.0; clickBox[1].y = p.y - 1.0; clickBox[1].z = p.z + 1.0;
         clickBox[2].x = p.x + 1.0; clickBox[2].y = p.y + 1.0; clickBox[2].z = p.z + 1.0;
-        clickBox[3].x = p.x + 1.0; clickBox[3].y = p.y - 1.0; clickBox[3].z = p.z + 1.0;
+        clickBox[3].x = p.x + 1.0; clickBox[3].y = p.y + 1.0; clickBox[3].z = p.z - 1.0;
 		distloc dl = Intersect(r, clickBox[0], clickBox[1],
 				clickBox[2], clickBox[3]);
 
-		if (dl.distance) {
+		clickBox[0].x += 2.0; clickBox[0].y += 2.0;
+				clickBox[1].x += 2.0; clickBox[1].y += 2.0;
+				clickBox[2].x -= 2.0; clickBox[2].y -= 2.0;
+				clickBox[3].x -= 2.0; clickBox[3].y -= 2.0;
+				distloc dl2 = Intersect(r, clickBox[0], clickBox[1],
+								clickBox[2], clickBox[3]);
+
+		if (dl.distance || dl.distance) {
 			m_intercept = dl;
 			//printf("Over the floor\n");
 			if (_camera->IsRotating())
@@ -340,7 +353,44 @@ void HadoopDropper::MouseMove(int x, int y)
 
 			m_cursorOver = true;
 			_cursor->SetScreenCoords(dl.intPoint);
-			this->m_selectIP = _iploc->GetIP(i);
+
+			/* Delete the current host */
+			if ( this->m_selectIP && (strcmp(this->m_selectIP, _iploc->GetIP(i)) == 0))
+				break;
+			if (this->m_selectIP)
+				delete this->m_selectHost;
+				delete this->m_selectIP;
+			this->m_selectIP = new char[strlen(_iploc->GetIP(i)) + 1];
+			strcpy(this->m_selectIP, _iploc->GetIP(i));
+
+			/* Get the hostname of the host */
+			//hostent* server = gethostbyname(this->m_selectIP);
+			//struct in_addr host_addr;
+
+			//if (!server) {
+			//	printf("Error looking up host: %s", this->m_selectIP);
+				//exit(-1);
+			//}
+			struct sockaddr_in serv_addr;
+			inet_aton(this->m_selectIP, &serv_addr.sin_addr);
+			serv_addr.sin_family = AF_INET;
+
+			//memcpy(&serv_addr.sin_addr, server->h_addr_list[0],
+			//		server->h_length);
+			hostent* host = gethostbyaddr(&(serv_addr.sin_addr), sizeof(struct in_addr), AF_INET);
+			if (host) {
+				//printf("%s", host->h_addr_list[0]);
+				this->m_selectHost = new char[strlen(host->h_name)+1];
+				strcpy(this->m_selectHost, host->h_name);
+			}
+			else
+			{
+				//herror(0);
+				this->m_selectHost = new char[strlen(this->m_selectIP)+1];
+				strcpy(this->m_selectHost, _iploc->GetIP(i));
+				//printf("%s\n", this->m_selectIP);
+
+			}
 			break;
 
 		} else {
@@ -349,29 +399,7 @@ void HadoopDropper::MouseMove(int x, int y)
 			m_cursorOver = false;
 		}
 
-		clickBox[0].x += 2.0; clickBox[0].z += 2.0;
-		clickBox[1].x += 2.0; clickBox[1].z += 2.0;
-		clickBox[2].x -= 2.0; clickBox[2].z -= 2.0;
-		clickBox[3].x -= 2.0; clickBox[3].z -= 2.0;
-		dl = Intersect(r, clickBox[0], clickBox[1],
-						clickBox[2], clickBox[3]);
 
-				if (dl.distance) {
-					m_intercept = dl;
-					//printf("Over the floor\n");
-					if (_camera->IsRotating())
-						_camera->StopRotate();
-
-					m_cursorOver = true;
-					_cursor->SetScreenCoords(dl.intPoint);
-					this->m_selectIP = _iploc->GetIP(i);
-					break;
-
-				} else {
-					if (!_camera->IsRotating())
-						_camera->Rotate(ROTATE_SPEED);
-					m_cursorOver = false;
-				}
 
 
 	}
@@ -601,7 +629,7 @@ void HadoopDropper::RenderSelected()
     if (this->m_cursorOver)
     {
     	char buf[100];
-    	sprintf(buf, "%s", this->m_selectIP);
+    	sprintf(buf, "%s", this->m_selectHost);
     	_seldisp->SetText(buf);
 
     }

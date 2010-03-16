@@ -346,8 +346,9 @@ void Drops::RenderDrop(SingleDrop* s)
     {
     	glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
     	glColor4f(1.0, 1.0, 1.0, 1.0);
-        glScalef(0.1, 0.1, 0.1);
+        glScalef(0.3, 0.3, 0.3);
     	glCallList(m_dropList);
+        //drawsphere(5);
 
 
     }

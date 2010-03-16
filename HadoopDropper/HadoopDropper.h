@@ -30,6 +30,7 @@ private:
     void RenderNodes();
     void RenderSelected();
     void InitDisplayLists();
+    char* m_selectHost;
     int mouse[2];
     char* m_selectIP;
     Drops* drops;
