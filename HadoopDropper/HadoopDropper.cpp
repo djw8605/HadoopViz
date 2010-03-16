@@ -641,6 +641,6 @@ void HadoopDropper::RenderSelected()
         glEnd();
         glPopMatrix();
         */
-    }
+    //}
 }
 
