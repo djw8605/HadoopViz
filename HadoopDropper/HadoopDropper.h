@@ -30,6 +30,8 @@ private:
     void RenderNodes();
     void RenderSelected();
     void InitDisplayLists();
+    int mouse[2];
+    char* m_selectIP;
     Drops* drops;
     point m_floorpoints[4];
     bool m_cursorOver;

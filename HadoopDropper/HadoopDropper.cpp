@@ -66,6 +66,7 @@ void HadoopDropper::Render()
     //printf("before drops render\n");
     drops->Render();
     RenderNodes();
+    this->MouseMove(this->mouse[0], this->mouse[1]);
     //RenderFloor();
 
     if(m_cursorOver)
@@ -276,6 +277,7 @@ void HadoopDropper::Select(int x, int y)
 
 void HadoopDropper::MouseMove(int x, int y)
 {
+		this->mouse[0] = x; this->mouse[1] = y;
         glPushMatrix();
         ray r;
         GLdouble pos3D_x, pos3D_y, pos3D_z;
@@ -320,26 +322,59 @@ void HadoopDropper::MouseMove(int x, int y)
 
 
         /* Now check if you're intersectiong the floor */
-        distloc dl = Intersect(r, m_floorpoints[0], m_floorpoints[1], m_floorpoints[2], m_floorpoints[3]);
-        if(dl.distance)
-        {
-            m_intercept = dl;
-            //printf("Over the floor\n");
-            if(_camera->IsRotating())
-                _camera->StopRotate();
+        for (int i = 0; i < _iploc->GetSize(); i++) {
+        point p = _iploc->GetInfo(i).GetPos();
+        point clickBox[4];
+        clickBox[0].x = p.x - 1.0; clickBox[0].y = p.y - 1.0; clickBox[0].z = p.z - 1.0;
+        clickBox[1].x = p.x - 1.0; clickBox[1].y = p.y + 1.0; clickBox[1].z = p.z - 1.0;
+        clickBox[2].x = p.x + 1.0; clickBox[2].y = p.y + 1.0; clickBox[2].z = p.z + 1.0;
+        clickBox[3].x = p.x + 1.0; clickBox[3].y = p.y - 1.0; clickBox[3].z = p.z + 1.0;
+		distloc dl = Intersect(r, clickBox[0], clickBox[1],
+				clickBox[2], clickBox[3]);
 
-            m_cursorOver = true;
-            _cursor->SetScreenCoords(dl.intPoint);
+		if (dl.distance) {
+			m_intercept = dl;
+			//printf("Over the floor\n");
+			if (_camera->IsRotating())
+				_camera->StopRotate();
+
+			m_cursorOver = true;
+			_cursor->SetScreenCoords(dl.intPoint);
+			this->m_selectIP = _iploc->GetIP(i);
+			break;
+
+		} else {
+			if (!_camera->IsRotating())
+				_camera->Rotate(ROTATE_SPEED);
+			m_cursorOver = false;
+		}
+
+		clickBox[0].x += 2.0; clickBox[0].z += 2.0;
+		clickBox[1].x += 2.0; clickBox[1].z += 2.0;
+		clickBox[2].x -= 2.0; clickBox[2].z -= 2.0;
+		clickBox[3].x -= 2.0; clickBox[3].z -= 2.0;
+		dl = Intersect(r, clickBox[0], clickBox[1],
+						clickBox[2], clickBox[3]);
+
+				if (dl.distance) {
+					m_intercept = dl;
+					//printf("Over the floor\n");
+					if (_camera->IsRotating())
+						_camera->StopRotate();
+
+					m_cursorOver = true;
+					_cursor->SetScreenCoords(dl.intPoint);
+					this->m_selectIP = _iploc->GetIP(i);
+					break;
+
+				} else {
+					if (!_camera->IsRotating())
+						_camera->Rotate(ROTATE_SPEED);
+					m_cursorOver = false;
+				}
 
 
-        }
-        else
-        {
-            if(!_camera->IsRotating())
-                _camera->Rotate(ROTATE_SPEED);
-            m_cursorOver = false;
-        }
-
+	}
 
 
         glPopMatrix();
@@ -563,32 +598,37 @@ void HadoopDropper::RenderSelected()
     //m_selectedIndex = row + col*(AREA_SIZE/SPACE_BETWEEN);
     //printf("Selected: %i\n", m_selectedIndex);
 
+    if (this->m_cursorOver)
+    {
+    	char buf[100];
+    	sprintf(buf, "%s", this->m_selectIP);
+    	_seldisp->SetText(buf);
+
+    }
 
     //printf("Size: %i\n\n", _iploc->GetSize());
-    if (tmpSelected < _iploc->GetSize())
-    {
+    //if (tmpSelected < _iploc->GetSize())
+    //{
 
     	/* Only execute when the selected block changes */
 		//if (m_selectedIndex != tmpSelected)
 		//{
-			m_selectedIndex = tmpSelected;
+			//m_selectedIndex = tmpSelected;
 			//printf("ip=%s\n", _iploc->GetIP(m_selectedIndex));
 
 			//_seldisp->SetText(_iploc->GetIP(m_selectedIndex));
-			char buf[100];
-			sprintf(buf, "%s: %lf", _iploc->GetIP(m_selectedIndex), _iploc->GetLoad(m_selectedIndex));
-			_seldisp->SetText(buf);
+
 			//_seldisp->SetText(_iploc->GetLoad(m_selectedIndex));
 
 		//}
-		point p = _iploc->GetLocation(m_selectedIndex);
+		//point p = _iploc->GetLocation(m_selectedIndex);
         //printf("think you selected %i: %i, %i\n",m_selectedIndex, col*SPACE_BETWEEN, row*SPACE_BETWEEN);
         //printf("actually slected: %lf, %lf\n", p.x, p.y);
 
 
 
     	/* Render the block */
-
+/*
         glPushMatrix();
         glTranslatef(p.x, p.y, 0.01);
         //printf("blah: %i, %i\\n", col * SPACE_BETWEEN, row * SPACE_BETWEEN);
@@ -600,6 +640,7 @@ void HadoopDropper::RenderSelected()
         glVertex3f(halveBetween, -halveBetween, 0.0);
         glEnd();
         glPopMatrix();
+        */
     }
 }
 

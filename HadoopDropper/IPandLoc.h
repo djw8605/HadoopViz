@@ -36,6 +36,8 @@ public:
     float GetMaxLoad();
     void ExpDecayLoad();
 
+    point GetPos() { return m_point; };
+
 
 private:
     point m_point;
