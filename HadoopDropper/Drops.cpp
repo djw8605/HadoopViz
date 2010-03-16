@@ -366,7 +366,7 @@ void Drops::RenderDrop(SingleDrop* s)
     		s->pos[1] = s->src.y + (tmpCounter * s->direction.y);
     		s->pos[2] = s->src.z + (tmpCounter * s->direction.z);
     		glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
-    		drawsphere(5);
+    		drawsphere(2);
 
     	}
 

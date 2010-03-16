@@ -358,8 +358,8 @@ void HadoopDropper::MouseMove(int x, int y)
 			if ( this->m_selectIP && (strcmp(this->m_selectIP, _iploc->GetIP(i)) == 0))
 				break;
 			if (this->m_selectIP)
-				delete this->m_selectHost;
-				delete this->m_selectIP;
+				delete [] this->m_selectHost;
+				delete [] this->m_selectIP;
 			this->m_selectIP = new char[strlen(_iploc->GetIP(i)) + 1];
 			strcpy(this->m_selectIP, _iploc->GetIP(i));
 
