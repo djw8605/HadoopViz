@@ -10,12 +10,15 @@
 #include <unistd.h>
 #include "Camera/Camera.h"
 #include <getopt.h>
+#include <vector>
 
+using namespace std;
 
 char* serverHost;
 short serverPort;
 char* dataDir;
 
+vector<char*> modified_ips;
 
 void usage()
 {
@@ -57,11 +60,13 @@ int main(int argc, char *argv[])
 	            {"server", required_argument, 0, 's'},
 	            {"port", required_argument, 0, 'p'},
 	            {"datadir", required_argument, 0, 'a'},
+	            {"modified", required_argument, 0, 'm'},
 	            {0, 0, 0, 0}
 	    };
 
 	int c;
 	short tmpValue;
+	char* tmp;
 	while(1)
 	{
 	    int option_index = 0;
@@ -111,6 +116,13 @@ int main(int argc, char *argv[])
 	    	dataDir[strlen(optarg)] = '\0';
 	    	break;
 
+	    case 'm':
+	    	tmp = new char[strlen(optarg)+1];
+	    	strcpy(tmp, optarg);
+	    	tmp[strlen(optarg)] = '\0';
+	    	modified_ips.push_back(tmp);
+	    	break;
+
 	    case '?':
 	        break;
 
@@ -125,7 +137,8 @@ int main(int argc, char *argv[])
 
 
 	}
-
+	//for (int i = 0; i < modified_ips.size(); i++)
+	//	printf("%s\n", modified_ips[i]);
 
 	/* Setup Window */
 	//glutInit(&argc, argv);

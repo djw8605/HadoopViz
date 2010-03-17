@@ -471,9 +471,17 @@ void HadoopDropper::RenderNodes()
 
 		float load = _iploc->GetLoad(i);
 		point p = _iploc->GetLocation(i);
+		IPandLoc node = _iploc->GetInfo(i);
 		glPushMatrix();
 		glTranslatef(p.x, p.y, p.z);
-		glColor4f(0.0, 1.0, 1.0, load / max_load);
+		if(node.UseColor())
+		{
+			//printf("Use Colors: %s\n", node.GetIP());
+			float *colors = node.GetColors();
+			glColor4f(colors[0], colors[1], colors[1], load/max_load);
+		}
+		else
+			glColor4f(0.0, 1.0, 1.0, load / max_load);
 		glBegin(GL_QUADS);							// Start Drawing Quads
 					// Bottom Face
 					glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);	// Top Right Of The Texture and Quad

@@ -16,6 +16,7 @@
 #include <netdb.h>
 
 
+
 #include "DropListener.h"
 #include "Drops.h"
 #include "Math/Math.h"
@@ -26,6 +27,7 @@
 
 extern char* serverHost;
 extern short serverPort;
+
 
 
 #define PORT_NUMBER 9345

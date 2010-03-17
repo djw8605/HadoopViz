@@ -18,6 +18,7 @@ IPandLoc::IPandLoc()
     // TODO Auto-generated constructor stub
     m_ip = 0;
     this->m_load = 0.0;
+    this->m_useColors = false;
 }
 
 IPandLoc::~IPandLoc()
@@ -43,6 +44,9 @@ IPandLoc::IPandLoc(const IPandLoc& rhs)
 
             m_point = rhs.m_point;
             m_load = rhs.m_load;
+            for (int i = 0; i < 3; i++)
+            	this->m_colors[i] = rhs.m_colors[i];
+            this->m_useColors = rhs.m_useColors;
 
 }
 
@@ -54,6 +58,7 @@ IPandLoc::IPandLoc(char* ip, point p)
 
     m_point = p;
     this->m_load = 0.0;
+    this->m_useColors = false;
 
 
 }
@@ -93,6 +98,9 @@ IPandLoc & IPandLoc::operator=(const IPandLoc &rhs)
 
         m_point = rhs.m_point;
         m_load = rhs.m_load;
+        for (int i = 0; i < 3; i++)
+        	this->m_colors[i] = rhs.m_colors[i];
+        this->m_useColors = rhs.m_useColors;
 
     }
     return *this;
@@ -124,5 +132,17 @@ float IPandLoc::GetMaxLoad()
 	return MAX_LOAD;
 
 }
+
+void IPandLoc::SetColor(float* colors)
+{
+	for(int i = 0; i < 3; i++)
+		this->m_colors[i] = colors[i];
+
+	this->m_useColors = true;
+
+}
+
+
+
 
 

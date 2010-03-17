@@ -38,11 +38,17 @@ public:
 
     point GetPos() { return m_point; };
 
+    void SetColor(float* colors) ;
+    float* GetColors() {return m_colors; };
+    bool UseColor() {return m_useColors; };
 
 private:
     point m_point;
     char* m_ip;
     float m_load;
+    float m_colors[3];
+    bool m_useColors;
+
 
 
 };

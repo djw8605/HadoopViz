@@ -13,6 +13,7 @@
 #include "IPtoLocation.h"
 #include "config.h"
 
+float modified_colors[3] = { 1.0, 0.0, 0.0};
 
 /* Note to self
  * arc equation: (-(((2/dist)*x - 1)^2) + 1) * sacle
@@ -21,6 +22,8 @@
  */
 
 using namespace std;
+
+extern vector<char*> modified_ips;
 
 IPtoLocation::IPtoLocation()
 {
@@ -69,7 +72,7 @@ point IPtoLocation::GetLocation(char* ip)
 
 void IPtoLocation::AddIP(char* ip)
 {
-    static int counter = 0;
+//    static int counter = 0;
     /* initialize the point */
     point p;
     //p.x = (counter / AREA_SIZE) * SPACE_BETWEEN;
@@ -79,10 +82,21 @@ void IPtoLocation::AddIP(char* ip)
     p.y = (rand() % 100) - 50;
     p.z = (rand() % 100) - 50;
     IPandLoc iploc(ip, p);
+    for(unsigned int i = 0; i < modified_ips.size(); i++)
+    {
+    	if (strcmp(modified_ips[i], ip) == 0)
+    	{
+    		iploc.SetColor(modified_colors);
+    		//printf("Found: %s", ip);
+    		break;
+
+    	}
+    }
+
     ips.push_back(iploc);
     //printf("%lf, %lf, %i\n", p.x, p.y, counter);
 
-    counter+=SPACE_BETWEEN;
+//    counter+=SPACE_BETWEEN;
 }
 
 
