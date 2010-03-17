@@ -214,7 +214,7 @@ void HadoopDropper::InitDisplayLists()
 		m_supportLists = false;
 	} else {
 
-                /*
+
 		glNewList(m_floorList, GL_COMPILE);
 		glPushMatrix();
 		glBegin( GL_QUADS);
@@ -226,7 +226,7 @@ void HadoopDropper::InitDisplayLists()
 		glEnd();
 		glPopMatrix();
 		glEndList();
-
+*/
 		/* Floor Tile List (used by the floor list) */
 		/*glNewList(m_floorTile, GL_COMPILE);
 		glBegin(GL_QUADS);
@@ -241,7 +241,7 @@ void HadoopDropper::InitDisplayLists()
 				/ 2.0), 0.0);
 		glEnd();
 		glEndList();
-
+*/
 		/* FloorList */
 		/*int counter = 0;
 		point p;
@@ -329,23 +329,35 @@ void HadoopDropper::MouseMove(int x, int y)
 
         /* Now check if you're intersectiong the floor */
         for (int i = 0; i < _iploc->GetSize(); i++) {
-        point p = _iploc->GetInfo(i).GetPos();
-        point clickBox[4];
-        clickBox[0].x = p.x - 1.0; clickBox[0].y = p.y - 1.0; clickBox[0].z = p.z - 1.0;
-        clickBox[1].x = p.x - 1.0; clickBox[1].y = p.y - 1.0; clickBox[1].z = p.z + 1.0;
-        clickBox[2].x = p.x + 1.0; clickBox[2].y = p.y + 1.0; clickBox[2].z = p.z + 1.0;
-        clickBox[3].x = p.x + 1.0; clickBox[3].y = p.y + 1.0; clickBox[3].z = p.z - 1.0;
-		distloc dl = Intersect(r, clickBox[0], clickBox[1],
-				clickBox[2], clickBox[3]);
+		point p = _iploc->GetInfo(i).GetPos();
+		point clickBox[4];
+		clickBox[0].x = p.x - 1.0;
+		clickBox[0].y = p.y - 1.0;
+		clickBox[0].z = p.z - 1.0;
 
-		clickBox[0].x += 2.0; clickBox[0].y += 2.0;
-				clickBox[1].x += 2.0; clickBox[1].y += 2.0;
-				clickBox[2].x -= 2.0; clickBox[2].y -= 2.0;
-				clickBox[3].x -= 2.0; clickBox[3].y -= 2.0;
-				distloc dl2 = Intersect(r, clickBox[0], clickBox[1],
-								clickBox[2], clickBox[3]);
+		clickBox[1].x = p.x - 1.0;
+		clickBox[1].y = p.y - 1.0;
+		clickBox[1].z = p.z + 1.0;
 
-		if (dl.distance || dl.distance) {
+		clickBox[2].x = p.x + 1.0;
+		clickBox[2].y = p.y + 1.0;
+		clickBox[2].z = p.z + 1.0;
+
+		clickBox[3].x = p.x + 1.0;
+		clickBox[3].y = p.y + 1.0;
+		clickBox[3].z = p.z - 1.0;
+
+		distloc dl = Intersect(r, clickBox[0], clickBox[1], clickBox[2],
+				clickBox[3]);
+
+		clickBox[0].x += 2.0; //clickBox[0].y += 2.0;
+		clickBox[1].x += 2.0; //clickBox[1].y += 2.0;
+		clickBox[2].x -= 2.0; //clickBox[2].y -= 2.0;
+		clickBox[3].x -= 2.0; //clickBox[3].y -= 2.0;
+		distloc dl2 = Intersect(r, clickBox[0], clickBox[1], clickBox[2],
+				clickBox[3]);
+
+		if (dl.distance || dl2.distance) {
 			m_intercept = dl;
 			//printf("Over the floor\n");
 			if (_camera->IsRotating())
@@ -355,11 +367,12 @@ void HadoopDropper::MouseMove(int x, int y)
 			_cursor->SetScreenCoords(dl.intPoint);
 
 			/* Delete the current host */
-			if ( this->m_selectIP && (strcmp(this->m_selectIP, _iploc->GetIP(i)) == 0))
+			if (this->m_selectIP && (strcmp(this->m_selectIP, _iploc->GetIP(i))
+					== 0))
 				break;
 			if (this->m_selectIP)
-				delete [] this->m_selectHost;
-				delete [] this->m_selectIP;
+				delete[] this->m_selectHost;
+			delete[] this->m_selectIP;
 			this->m_selectIP = new char[strlen(_iploc->GetIP(i)) + 1];
 			strcpy(this->m_selectIP, _iploc->GetIP(i));
 
@@ -369,7 +382,7 @@ void HadoopDropper::MouseMove(int x, int y)
 
 			//if (!server) {
 			//	printf("Error looking up host: %s", this->m_selectIP);
-				//exit(-1);
+			//exit(-1);
 			//}
 			struct sockaddr_in serv_addr;
 			inet_aton(this->m_selectIP, &serv_addr.sin_addr);
@@ -377,16 +390,15 @@ void HadoopDropper::MouseMove(int x, int y)
 
 			//memcpy(&serv_addr.sin_addr, server->h_addr_list[0],
 			//		server->h_length);
-			hostent* host = gethostbyaddr(&(serv_addr.sin_addr), sizeof(struct in_addr), AF_INET);
+			hostent* host = gethostbyaddr(&(serv_addr.sin_addr),
+					sizeof(struct in_addr), AF_INET);
 			if (host) {
 				//printf("%s", host->h_addr_list[0]);
-				this->m_selectHost = new char[strlen(host->h_name)+1];
+				this->m_selectHost = new char[strlen(host->h_name) + 1];
 				strcpy(this->m_selectHost, host->h_name);
-			}
-			else
-			{
+			} else {
 				//herror(0);
-				this->m_selectHost = new char[strlen(this->m_selectIP)+1];
+				this->m_selectHost = new char[strlen(this->m_selectIP) + 1];
 				strcpy(this->m_selectHost, _iploc->GetIP(i));
 				//printf("%s\n", this->m_selectIP);
 
@@ -488,7 +500,29 @@ void HadoopDropper::RenderNodes()
 					glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f,  1.0f);	// Bottom Right Of The Texture and Quad
 					glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f,  1.0f,  1.0f);	// Top Right Of The Texture and Quad
 					glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);	// Top Left Of The Texture and Quad
-				glEnd();								// Done Drawing Quads
+
+
+					/* Testing */
+					/*point clickBox[4];
+					clickBox[0].x = -1.0; clickBox[0].y = -1.0; clickBox[0].z = -1.0;
+					clickBox[1].x = -1.0; clickBox[1].y = -1.0; clickBox[1].z = 1.0;
+					clickBox[2].x = 1.0; clickBox[2].y = 1.0; clickBox[2].z = 1.0;
+					clickBox[3].x = 1.0; clickBox[3].y = 1.0; clickBox[3].z = -1.0;
+					for (int a = 0; a < 4; a++)
+						glVertex3f(clickBox[a].x, clickBox[a].y, clickBox[a].z);
+					//distloc dl = Intersect(r, clickBox[0], clickBox[1],
+					//		clickBox[2], clickBox[3]);
+
+					clickBox[0].x += 2.0; //clickBox[0].y += 2.0;
+					clickBox[1].x += 2.0; //clickBox[1].y += 2.0;
+					clickBox[2].x -= 2.0; //clickBox[2].y -= 2.0;
+					clickBox[3].x -= 2.0; //clickBox[3].y -= 2.0;
+					//		distloc dl2 = Intersect(r, clickBox[0], clickBox[1],
+					//						clickBox[2], clickBox[3]);
+					for (int a = 0; a < 4; a++)
+						glVertex3f(clickBox[a].x, clickBox[a].y, clickBox[a].z);
+
+			*/	glEnd();								// Done Drawing Quads
 
 		glEnd();
 		glPopMatrix();
@@ -503,7 +537,7 @@ void HadoopDropper::RenderNodes()
 void HadoopDropper::RenderFloor()
 {
 
-    int counter = 0;
+    //int counter = 0;
     point p;
 
 
@@ -530,7 +564,7 @@ void HadoopDropper::RenderFloor()
 			//printf("%lf, %lf, %lf\n", p.x, p.y, p.z);
 
 		}
-
+*/
     	/* Increase the size of the intersect area, for selection */
     	for (int i = _iploc->GetSize() - (AREA_SIZE / SPACE_BETWEEN); i
 				< _iploc->GetSize(); i++) {
