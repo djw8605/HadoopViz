@@ -11,10 +11,9 @@ import threading
 from socket import *
 from select import *
 
-if '/opt/vdt/gratia/probe/common' not in sys.path:
-    sys.path.append('/opt/vdt/gratia/probe/common')
-
-import Gratia
+#if '/opt/vdt/gratia/probe/common' not in sys.path:
+#    sys.path.append('/opt/vdt/gratia/probe/common')
+#import Gratia
 
 syslogport = 514
 
@@ -90,6 +89,9 @@ ONE_HOUR = datetime.timedelta(0, 3600)
 class GratiaRecordKeeper(object):
 
     def __init__(self, probeConfig, per_minute=False):
+        if '/opt/vdt/gratia/probe/common' not in sys.path:
+            sys.path.append('/opt/vdt/gratia/probe/common')
+        import Gratia
         self.uploader = GratiaRecordUploader(probeConfig)
         self.uploader.run()
         self.default = {'protocol': 'hadoop', 'grid': 'OSG', 'duration': 0}
@@ -281,7 +283,10 @@ class SysLogServ(object):
             if self.hostnames.has_key(gridftparr[0]):
                 src = self.hostnames[gridftparr[0]]
             else:
-                src = gethostbyname(gridftparr[0])
+                try:
+                    src = gethostbyname(gridftparr[0])
+                catch:
+                    src = gridftparr[0]
                 self.hostnames[gridftparr[0]] = src
                 print "Adding %s as %s" % (gridftparr[0], src)
             self.SendToConnected(self.connlist, operation, src, gridftparr[1], gridftparr[3])
@@ -329,7 +334,8 @@ class SysLogServ(object):
     def Close(self):
         for con in self.connlist:
             con.close()
-        self.recordKeeper.shutdown()
+        if self.recordKeeper:
+            self.recordKeeper.shutdown()
 
 
 
