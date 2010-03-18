@@ -6,7 +6,7 @@ FREETYPE_LIBS = $(shell freetype-config --libs)
 #LIB3DS_LIBS = $(shell lib3ds-config --libs)
 
 SDL_CFLAGS = $(shell sdl-config --cflags)
-SDL_LIBS = $(shell sdl-config --libs)
+SDL_LIBS = $(shell sdl-config --libs) -lGLU -lGL
 #SDL_LIBS = -lSDLmain -lSDL
 
 OS = $(shell uname -s)
