@@ -40,6 +40,7 @@ private:
     void RenderDrop(SingleDrop* s );
 
     GLuint m_dropList;
+    GLuint m_sphereList;
 
     DropListener* m_dl;
 
