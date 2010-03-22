@@ -100,10 +100,49 @@ class SysLogServ(object):
         client_match = self.clientregex.match(data)
         if self.receiveblock.search(data):
             src,dest = self.GetSrcDest(data)
-            self.SendToConnected(self.connlist, "recvblock", src, dest)
+            if self.hostnames.has_key(src):
+                prettySrc = self.hostnames[src]
+            else:
+		try:
+			prettySrc = gethostbyaddr(src)[0]
+		except:
+			prettySrc = src
+		self.hostnames[src] = prettySrc
+                print "Adding %s as %s" % (src, prettySrc)
+
+            if self.hostnames.has_key(dest):
+                prettyDest = self.hostnames[dest]
+            else:
+		try:
+			prettyDest = gethostbyaddr(dest)[0]
+		except:
+			prettyDest = dest
+		self.hostnames[dest] = prettyDest
+                print "Adding %s as %s" % (dest, prettyDest)
+            self.SendToConnected(self.connlist, "recvblock", prettySrc, prettyDest)
         elif client_match:
             time, src, dest, bytes, op = client_match.groups()
-            self.SendToConnected(self.connlist, "clienttrace", src, dest)
+            if self.hostnames.has_key(src):
+                prettySrc = self.hostnames[src]
+            else:
+		try:
+			prettySrc = gethostbyaddr(src)[0]
+		except:
+			prettySrc = src
+		self.hostnames[src] = prettySrc
+
+            if self.hostnames.has_key(dest):
+                prettyDest = self.hostnames[dest]
+            else:
+		try:
+			prettyDest = gethostbyaddr(dest)[0]
+		except:
+			prettyDest = dest
+		self.hostnames[dest] = prettyDest
+                print "Adding %s as %s" % (dest, prettyDest)
+                print "Adding %s as %s" % (src, prettySrc)
+
+            self.SendToConnected(self.connlist, "clienttrace", prettySrc, prettyDest)
         elif self.gridftp.search(data):
             #print "Received gridftp packet"
             gridftparr = self.ParseGridftp(data)
@@ -121,8 +160,11 @@ class SysLogServ(object):
             if self.hostnames.has_key(gridftparr[0]):
                 src = self.hostnames[gridftparr[0]]
             else:
-                src = gethostbyname(gridftparr[0])
-                self.hostnames[gridftparr[0]] = src
+		try:
+			src = gethostbyaddr(gridftparr[0])[0]
+		except:
+			src = gridftparr[0]
+		self.hostnames[gridftparr[0]] = src
                 print "Adding %s as %s" % (gridftparr[0], src)
             self.SendToConnected(self.connlist, operation, src, gridftparr[1], gridftparr[3])
             #print data
@@ -177,7 +219,6 @@ def main():
     child_pid = os.fork()
     if child_pid != 0:
         sys.exit(0)
-
 
     sysserv = SysLogServ()
 
