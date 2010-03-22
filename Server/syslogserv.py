@@ -217,8 +217,14 @@ class SysLogServ(object):
 
 def main():
     child_pid = os.fork()
-    if child_pid != 0:
-        sys.exit(0)
+    if child_pid == 0:
+        print os.getpid()
+        fileid = open("/var/run/hadoopviz.pid", mode='w')
+        fileid.write(repr(os.getpid()))
+        fileid.write('\n')
+        fileid.close()
+    else:
+        sys.exit(0);
 
     sysserv = SysLogServ()
 
