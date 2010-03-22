@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# /etc/init.d/hadoopviz - Start/stop the hadoopviz services
+#
+# The following two lines allow this script to be managed by Fedora's
+# chkconfig program.
+#
+# chkconfig: - 80 30
+# description: hadoopviz is a syslog collector for HDFS visualizations
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+if [ -e /etc/sysconfig/hadoopviz ] ; then
+    . /etc/sysconfig/hadoopviz
+fi
+
+start() {
+    echo -n "Starting hadoopviz-server: "
+    daemon --pidfile /var/run/hadoopviz.pid /usr/bin/hadoopviz-server $HADOOPVIZ_OPTIONS
+    echo
+    touch /var/lock/subsys/hadoopviz
+}
+
+# A function to stop a program.
+stop() {
+    echo -n "Shutting down hadoopviz-server: "
+    killproc -p /var/run/hadoopviz.pid hadoopviz-server
+    echo
+    rm -f /var/lock/subsys/hadoopviz
+}
+
+case $1 in 
+'start')
+    start
+    ;;
+'stop')
+    stop
+    ;;
+'status')
+    status xrootd
+    ;;
+'reload' | 'restart')
+    $0 stop
+    $0 start
+    ;;
+'condrestart')
+    [ -f /var/lock/subsys/hadoopviz ] && restart
+    ;;
+
+*)
+    echo "usage: $0 {start|stop|status|restart|condrestart}"
+    ;;
+esac
+
+exit 0

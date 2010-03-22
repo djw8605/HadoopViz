@@ -174,6 +174,10 @@ class SysLogServ(object):
 
 
 def main():
+    child_pid = os.fork()
+    if child_pid != 0:
+        sys.exit(0)
+
 
     sysserv = SysLogServ()
 
