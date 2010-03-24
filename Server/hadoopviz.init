@@ -17,7 +17,7 @@ fi
 
 start() {
     echo -n "Starting hadoopviz-server: "
-    daemon --pidfile /var/run/hadoopviz.pid /usr/bin/hadoopviz-server $HADOOPVIZ_OPTIONS
+    daemon --pidfile /var/run/hadoopviz/hadoopviz.pid /usr/bin/hadoopviz-server --pid=/var/run/hadoopviz/hadoopviz.pid --user=hadoopviz -d $HADOOPVIZ_OPTIONS
     echo
     touch /var/lock/subsys/hadoopviz
 }
@@ -25,7 +25,7 @@ start() {
 # A function to stop a program.
 stop() {
     echo -n "Shutting down hadoopviz-server: "
-    killproc -p /var/run/hadoopviz.pid hadoopviz-server
+    killproc -p /var/run/hadoopviz/hadoopviz.pid hadoopviz-server
     echo
     rm -f /var/lock/subsys/hadoopviz
 }
