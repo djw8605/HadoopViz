@@ -340,10 +340,50 @@ class SysLogServ(object):
         client_match = self.clientregex.match(data)
         if self.receiveblock.search(data):
             src,dest = self.GetSrcDest(data)
-            self.SendToConnected(self.connlist, "recvblock", src, dest)
+            if self.hostnames.has_key(src):
+                prettySrc = self.hostnames[src]
+            else:
+               try:
+                       prettySrc = gethostbyaddr(src)[0]
+               except: 
+                       prettySrc = src
+               self.hostnames[src] = prettySrc
+               print "Adding %s as %s" % (src, prettySrc)
+
+            if self.hostnames.has_key(dest):
+                prettyDest = self.hostnames[dest]
+            else:
+               try:
+                       prettyDest = gethostbyaddr(dest)[0]
+               except: 
+                       prettyDest = dest
+               self.hostnames[dest] = prettyDest
+               print "Adding %s as %s" % (dest, prettyDest)
+            self.SendToConnected(self.connlist, "recvblock", prettySrc, prettyDest)
         elif client_match:
             time, src, dest, bytes, op = client_match.groups()
-            self.SendToConnected(self.connlist, "clienttrace", src, dest)
+            if self.hostnames.has_key(src):
+                prettySrc = self.hostnames[src]
+            else:
+               try:
+                       prettySrc = gethostbyaddr(src)[0]
+               except: 
+                       prettySrc = src
+               self.hostnames[src] = prettySrc
+               print "Adding %s as %s" % (src, prettySrc)
+
+            if self.hostnames.has_key(dest):
+                prettyDest = self.hostnames[dest]
+            else:
+               try:
+                       prettyDest = gethostbyaddr(dest)[0]
+               except:
+                       prettyDest = dest
+               self.hostnames[dest] = prettyDest
+               print "Adding %s as %s" % (dest, prettyDest)
+
+            self.SendToConnected(self.connlist, "clienttrace", prettySrc, prettyDest)
+
             if self.recordKeeper:
                 self.recordKeeper(time, src, dest, int(bytes), op)
         elif self.gridftp.search(data):
@@ -364,7 +404,7 @@ class SysLogServ(object):
                 src = self.hostnames[gridftparr[0]]
             else:
                 try:
-                    src = gethostbyname(gridftparr[0])
+                    src = gethostbyaddr(gridftparr[0])[0]
                 except:
                     src = gridftparr[0]
                 self.hostnames[gridftparr[0]] = src
