@@ -7,7 +7,7 @@ import sys,re,select,time
 
 
 from socket import *
-line_re = re.compile(".*IP (\d+.\d+.\d+.\d+).*> (\d+.\d+.\d+.\d+)")
+line_re = re.compile(".*IP (\d+.\d+.\d+.\d+).(\d+).*> (\d+.\d+.\d+.\d+).(\d+)")
 host = "129.93.229.173"
 
 
@@ -21,8 +21,8 @@ sock = socket(AF_INET, SOCK_DGRAM)
 
 def SendParsed(parsed):
    if host not in parsed:
-      sock.sendto("packet " + " ".join(parsed), (host, 9345))
-#      print " ".join(parsed)
+      sock.sendto("packet " + " ".join( ( parsed[0], parsed[2], parsed[1], parsed[3] ) ), (host, 9345))
+      print " ".join( (parsed[0], parsed[2], parsed[1], parsed[3]) )
 
 def ReadOutput(tcpdump_out):
    while 1:
@@ -35,7 +35,7 @@ def ReadOutput(tcpdump_out):
 
 
 def main():
-   tcpdump_proc = subprocess.Popen("/usr/sbin/tcpdump -n -i eth0", stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
+   tcpdump_proc = subprocess.Popen("/usr/sbin/tcpdump -n -i en1", stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
    tcp_stdout = tcpdump_proc.stdout
    tcp_stderr = tcpdump_proc.stderr
    while len(select.select( [tcp_stderr], [], [], 0.0)[0]) != 0:
