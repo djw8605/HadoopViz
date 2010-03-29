@@ -50,7 +50,12 @@ class SysLogServ(object):
         # bind to the port, listen from everywhere
         self.udpservSocket.bind(('', self.port))
 #        self.syslogSocket.bind(('', syslogport))
-        self.tcpservSocket.bind(('', self.port))
+        try:
+            self.tcpservSocket.bind(('', self.port))
+        except socket.error:
+            self.tcpservSocket.close()
+            self.tcpservSocket.bind(('', self.port))
+            
         self.tcpservSocket.listen(3)
         
         second = time.time()
