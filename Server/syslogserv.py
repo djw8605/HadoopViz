@@ -108,7 +108,7 @@ class SysLogServ(object):
         if ssh_match:
             accept, method, user, src = ssh_match.groups()
             print accept + " " +  method + " " +  user + " " +  src
-            self.SendToConnected(self.connlist, "ssh", src, host[0])
+            self.SendToConnected(self.connlist, "ssh", src, host[0], accept)
         elif (self.packetregex.match(data)) != None:
             packet_match = self.packetregex.match(data)
             src, dest = packet_match.groups()

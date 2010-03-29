@@ -287,7 +287,7 @@ void Drops::RenderDrop(SingleDrop* s)
     /* Movement parts */
     if((s->type == BLOCK_ADD) || (s->type == BLOCK_DEL))
         s->pos[2] = s->pos[2] - getTime() * DROP_SPEED;
-    else if ((s->type == PACKET) || (s->type == GLOBUS))
+    else if ((s->type == PACKET) || (s->type == GLOBUS) || (s->type == SSH))
     {
 
     	s->pos[0] = (s->direction.x * s->counter) + s->src.x;
@@ -377,6 +377,21 @@ void Drops::RenderDrop(SingleDrop* s)
     		glCallList(this->m_sphereList);
 
     	}
+
+    }
+    else if (s->type == SSH)
+    {
+    	//printf("SSH");
+    	glColor4f(0.0, 1.0, 0.0, 1.0);
+    	glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
+    	glRotatef(90, 1.0, 0.0, 0.0);
+    	glScalef(0.3, 0.3, 0.3);
+
+
+    	freetype::print(*GetFont(), 0.0, 0.0, "SSH");
+
+
+
 
     }
     //glutSolidSphere(1.0, 5, 5);
