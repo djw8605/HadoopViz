@@ -77,10 +77,10 @@ void DropListener::InitializeConnection()
     memcpy(&serv_addr.sin_addr, server->h_addr_list[0], server->h_length);
 
     serv_addr.sin_port=htons(serverPort);
-    if(connect(sock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)))
+    while(connect(sock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) != 0)
     {
-    	printf("Unable to connect to %s\nNothing to do, Exiting...\n", serverHost);
-    	exit(-1);
+    	printf("Unable to connect to %s\nTrying again...\n", serverHost);
+    	return;
 
     }
     srand ( (unsigned) time ( NULL ));
@@ -115,7 +115,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
         packlen = recv(sock, buf+offset, bufSize-1, 0);
         if(packlen == 0)
         {
-            printf("received close signal, was not ready for close");
+            printf("received close signal, was not ready for close\n");
             printf("Attempting to reconnect\n");
             close(this->sock);
             this->InitializeConnection();
@@ -196,7 +196,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 sd->type = SSH;
                 sd->counter = 0;
                 sd->direction = ToVector(sd->src, sd->dest);
-
+                printf("SSH\n%s\n", buf+offset);
 
                 free(bufsType.dest);
                 free(bufsType.src);
