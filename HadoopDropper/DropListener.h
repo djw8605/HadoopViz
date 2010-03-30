@@ -33,7 +33,7 @@ public:
 
 private:
     TypeInfo GetTypeInfo(char* buf, int size);
-    void InitializeConnection();
+    int InitializeConnection();
 
     int sock;
     struct sockaddr_in serv_addr;

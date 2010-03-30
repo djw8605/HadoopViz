@@ -61,7 +61,7 @@ DropListener::~DropListener()
 
 }
 
-void DropListener::InitializeConnection()
+int DropListener::InitializeConnection()
 {
 
     hostent* server = gethostbyname(serverHost);
@@ -77,13 +77,14 @@ void DropListener::InitializeConnection()
     memcpy(&serv_addr.sin_addr, server->h_addr_list[0], server->h_length);
 
     serv_addr.sin_port=htons(serverPort);
-    while(connect(sock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) != 0)
+    if(connect(sock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)))
     {
     	printf("Unable to connect to %s\nTrying again...\n", serverHost);
-    	return;
+    	return 1;
 
     }
     srand ( (unsigned) time ( NULL ));
+    return 0;
     //bind(sock, (struct sockaddr* ) &serv_addr, sizeof(sockaddr_in));
 
 }
@@ -118,7 +119,8 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
             printf("received close signal, was not ready for close\n");
             printf("Attempting to reconnect\n");
             close(this->sock);
-            this->InitializeConnection();
+            if(this->InitializeConnection())
+            	return;
 
             //printf("received odd thing\n");
 

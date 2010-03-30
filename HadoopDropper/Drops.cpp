@@ -385,7 +385,7 @@ void Drops::RenderDrop(SingleDrop* s)
     	glColor4f(0.0, 1.0, 0.0, 1.0);
     	glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
     	glRotatef(90, 1.0, 0.0, 0.0);
-    	glScalef(0.3, 0.3, 0.3);
+    	glScalef(0.2, 0.2, 0.2);
 
 
     	freetype::print(*GetFont(), 0.0, 0.0, "SSH");

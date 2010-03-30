@@ -52,7 +52,7 @@ class SysLogServ(object):
 #        self.syslogSocket.bind(('', syslogport))
         try:
             self.tcpservSocket.bind(('', self.port))
-        except socket.error:
+        except:
             self.tcpservSocket.close()
             self.tcpservSocket.bind(('', self.port))
             
