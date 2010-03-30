@@ -195,11 +195,15 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 sd->scale = ((float)rand() / RAND_MAX)*1.0+3;
                 //printf("scale: %lf", sd->scale);
                 //sd->scale = 3;
-                sd->type = SSH;
+                if (strcmp(bufsType.extra, "Accepted") == 0)
+                	sd->type = SSH_ACCEPT;
+                else
+                	sd->type = SSH_DENY;
                 sd->counter = 0;
                 sd->direction = ToVector(sd->src, sd->dest);
-                //printf("SSH\n%s\n", buf+offset);
+                printf("SSH: %s\n", bufsType.extra);
 
+				free(bufsType.extra);
                 free(bufsType.dest);
                 free(bufsType.src);
                 (*s).push_back(sd);
@@ -269,6 +273,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 
                 //free(bufsType.dest);
                 //printf("doing float: %s\n", bufsType.src);
+
                 free(bufsType.src);
                 free(bufsType.dest);
                 (*s).push_back(sd);
@@ -324,7 +329,11 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 TypeInfo DropListener::GetTypeInfo(char* buf, int size)
 {
     TypeInfo toReturn;
-
+    toReturn.extra = 0;
+    char* tmp = (char*) malloc(size+2);
+    memcpy(tmp, buf, size+1);
+    tmp[size+1] = '\0';
+    buf = tmp;
     // Get the first ip, the string after the first space
     char* firstIP = strchr(buf, ' ') + 1;
     int nfirstIP = strchr(firstIP, ' ') - firstIP;
@@ -347,18 +356,33 @@ TypeInfo DropListener::GetTypeInfo(char* buf, int size)
 
         //second ip, after the second space
         char* secondIP = strchr(firstIP, ' ') + 1;
-        int nsecondIP = strchr(secondIP, '\n') - secondIP;
+        int nsecondIP;
+        if ((strchr(secondIP, ' ') != 0) && (strchr(secondIP, ' ') < strchr(secondIP, '\n')))
+        {
+        	nsecondIP = strchr(secondIP, ' ') - secondIP;
+        	char* extra = nsecondIP + secondIP + 1;
+        	int nExtra = strchr(extra, '\n') - extra;
+        	toReturn.extra = (char*) malloc (nExtra+1);
+        	memcpy(toReturn.extra, extra, nExtra);
+        	toReturn.extra[nExtra] = '\0';
+        }
+        else
+        	nsecondIP = strchr(secondIP, '\n') - secondIP;
         toReturn.dest = (char*) malloc(nsecondIP + 1);
         memcpy(toReturn.dest, secondIP, nsecondIP);
         toReturn.dest[nsecondIP] = '\0';
     }
+
+    // Check if there is any extra text
+
+
     //printf("buf = %s\n", buf);
     //printf("first:%i, second:%i\n", nfirstIP, nsecondIP);
 
     //new char[nfirstIP] + 1;
     //new char[nsecondIP] + 1;
 
-
+    free(tmp);
     return toReturn;
 
 

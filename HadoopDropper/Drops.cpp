@@ -287,7 +287,7 @@ void Drops::RenderDrop(SingleDrop* s)
     /* Movement parts */
     if((s->type == BLOCK_ADD) || (s->type == BLOCK_DEL))
         s->pos[2] = s->pos[2] - getTime() * DROP_SPEED;
-    else if ((s->type == PACKET) || (s->type == GLOBUS) || (s->type == SSH))
+    else if ((s->type == PACKET) || (s->type == GLOBUS) || (s->type == SSH_ACCEPT) || (s->type == SSH_DENY))
     {
 
     	s->pos[0] = (s->direction.x * s->counter) + s->src.x;
@@ -379,10 +379,13 @@ void Drops::RenderDrop(SingleDrop* s)
     	}
 
     }
-    else if (s->type == SSH)
+    else if (s->type == SSH_ACCEPT || s->type == SSH_DENY)
     {
     	//printf("SSH");
-    	glColor4f(0.0, 1.0, 0.0, 1.0);
+    	if (s->type == SSH_ACCEPT)
+    		glColor4f(0.0, 1.0, 0.0, 1.0);
+    	else
+    		glColor4f(1.0, 0.0, 0.0, 1.0);
     	glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
     	//double angle = atan2(y2 - y1, x2 - x1) * 180 / PI;
     	float xyangle = (180/(M_PI)) * atan2((s->src.y - s->dest.y), (s->src.x - s->dest.x));

@@ -20,6 +20,7 @@ struct TypeInfo
 {
     char* src;
     char* dest;
+    char* extra;
 
 };
 
