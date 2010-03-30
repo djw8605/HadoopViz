@@ -198,7 +198,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 sd->type = SSH;
                 sd->counter = 0;
                 sd->direction = ToVector(sd->src, sd->dest);
-                printf("SSH\n%s\n", buf+offset);
+                //printf("SSH\n%s\n", buf+offset);
 
                 free(bufsType.dest);
                 free(bufsType.src);

@@ -3,6 +3,15 @@
 #include <cstdio>
 #include <cmath>
 
+
+float Magnitude(d_vector v)
+{
+	point origin;
+	origin.x = origin.y = origin.z = 0;
+	return Distance(origin, v);
+
+}
+
 d_vector Normal(point p1, point p2, point p3)
 {
 	return Normal(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z);

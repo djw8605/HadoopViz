@@ -12,6 +12,11 @@ struct point {
 		result.z *= rhs;
 		return result;
 	}
+	float operator*(const point &rhs)
+	{
+		// Dot Product
+		return (this->x * rhs.x) + (this->y * rhs.y) + (this->z * rhs.z);
+	}
 };
 
 typedef point d_vector;
@@ -40,6 +45,8 @@ void Normalize(d_vector &v);
 d_vector ToVector(const point &p1, const point &p2);
 
 float Distance(point p1, point p2);
+
+float Magnitude(d_vector v);
 
 
 #endif // _DEREKMATH_H

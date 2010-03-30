@@ -384,8 +384,23 @@ void Drops::RenderDrop(SingleDrop* s)
     	//printf("SSH");
     	glColor4f(0.0, 1.0, 0.0, 1.0);
     	glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
+    	//double angle = atan2(y2 - y1, x2 - x1) * 180 / PI;
+    	float xyangle = (180/(M_PI)) * atan2((s->src.y - s->dest.y), (s->src.x - s->dest.x));
+    	//float yzangle = (180/(M_PI)) * atan((s->src.z - s->dest.z) / (sqrt(pow(s->src.x - s->dest.x, 2) + pow(s->src.y - s->dest.y, 2))));
     	glRotatef(90, 1.0, 0.0, 0.0);
+    	glRotatef(xyangle+180, 0.0, 1.0, 0.0);
+    	d_vector xaxis, tmp;
+    	xaxis.x = tmp.x = s->dest.x - s->src.x;
+    	xaxis.y = tmp.y = s->dest.y - s->src.y;
+    	xaxis.z = 0;
+
+    	tmp.z = s->dest.z - s->src.z;
+    	float theta = (180/M_PI) * acos( (xaxis * tmp) / (Magnitude(xaxis)*Magnitude(tmp)) );
+    	if	(s->dest.z < s->src.z)
+    		theta *= -1.0;
+    	glRotatef(theta, 0.0, 0.0, 1.0);
     	glScalef(0.2, 0.2, 0.2);
+
 
 
     	freetype::print(*GetFont(), 0.0, 0.0, "SSH");
