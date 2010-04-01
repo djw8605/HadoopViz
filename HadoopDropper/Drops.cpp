@@ -386,6 +386,10 @@ void Drops::RenderDrop(SingleDrop* s)
     		glColor4f(0.0, 1.0, 0.0, 1.0);
     	else
     		glColor4f(1.0, 0.0, 0.0, 1.0);
+    	glBegin(GL_LINES);
+    	glVertex3f(s->src.x,s->src.y, s->src.z);
+    	glVertex3f(s->dest.x, s->dest.y, s->dest.z);
+    	glEnd();
     	glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
     	//double angle = atan2(y2 - y1, x2 - x1) * 180 / PI;
     	float xyangle = (180/(M_PI)) * atan2((s->src.y - s->dest.y), (s->src.x - s->dest.x));
