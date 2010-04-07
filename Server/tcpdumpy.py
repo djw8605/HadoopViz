@@ -23,11 +23,11 @@ class TCPParser:
         while 1:
             fork_pid = os.fork()
             if fork_pid == 0:
-                print "In Child"
+                #print "In Child"
                 self.CreateProcess()
                 self.ReadOutput()
             else:
-                print "In Parent"
+                #print "In Parent"
                 time.sleep(self.incriment)
                 self.DestroyProcess(fork_pid)
                 
@@ -42,7 +42,7 @@ class TCPParser:
             print self.tcp_stderr.readline()
         
     def DestroyProcess(self, pid):
-        print "Killing"
+        #print "Killing"
         os.kill(pid, signal.SIGKILL)
         
         
@@ -56,7 +56,7 @@ class TCPParser:
         global host
         #if host not in parsed:
         self.sock.sendto("packet " + " ".join( ( parsed[0], parsed[2], parsed[1], parsed[3] ) ), (host, 9345))
-        print " ".join( (parsed[0], parsed[2], parsed[1], parsed[3]) )
+        #print " ".join( (parsed[0], parsed[2], parsed[1], parsed[3]) )
 
     def ReadOutput(self):
         started = time.time()
