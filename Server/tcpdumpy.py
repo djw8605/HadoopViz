@@ -11,38 +11,65 @@ line_re = re.compile(".*IP (\d+.\d+.\d+.\d+).([\d|\w]+)\s+>\s+(\d+.\d+.\d+.\d+).
 host = "129.93.229.173"
 
 
-def ParseLine(line):
-   regex_line = line_re.search(line)
-   if regex_line:
-#      print line
-      return regex_line.groups()
+class TCPParser:
+    def __init__(self, interface):
+        self.process = None
+        self.interface = interface
+        self.incriment = 21600
+        self.sock = socket(AF_INET, SOCK_DGRAM)
+        
+    def Start(self):
+        self.CreateProcess()
+        self.ReadOutput()
+        pass
 
+    def CreateProcess(self):
+        global host
+        self.tcpdump_proc = subprocess.Popen("/usr/sbin/tcpdump -tn -i %s ip host not %s" % (self.interface, host), stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
+        self.tcp_stdout = self.tcpdump_proc.stdout
+        self.tcp_stderr = self.tcpdump_proc.stderr
+        while len(select.select( [self.tcp_stderr], [], [], 0.0)[0]) != 0:
+            print self.tcp_stderr.readline()
+        
+    def DestroyProcess(self):
+        self.tcpdump_proc.terminate()
+        self.tcpdump_proc.kill()
+        
+    def ParseLine(self, line):
+        global line_re
+        regex_line = line_re.search(line)
+        if regex_line:
+            return regex_line.groups()
 
-sock = socket(AF_INET, SOCK_DGRAM)
+    def SendParsed(self, parsed):
+        global host
+        #if host not in parsed:
+        self.sock.sendto("packet " + " ".join( ( parsed[0], parsed[2], parsed[1], parsed[3] ) ), (host, 9345))
+        #print " ".join( (parsed[0], parsed[2], parsed[1], parsed[3]) )
 
-def SendParsed(parsed):
-   #if host not in parsed:
-   sock.sendto("packet " + " ".join( ( parsed[0], parsed[2], parsed[1], parsed[3] ) ), (host, 9345))
-#   print " ".join( (parsed[0], parsed[2], parsed[1], parsed[3]) )
-
-def ReadOutput(tcpdump_out):
-   while 1:
-      if len(select.select( [tcpdump_out], [], [], 0.0)[0]) != 0:
-         parsed = ParseLine(tcpdump_out.readline())
-         if parsed != None:
-            SendParsed(parsed)
-      else:
-         time.sleep(.01)
+    def ReadOutput(self):
+        started = time.time()
+        while 1:
+            if len(select.select( [self.tcp_stdout], [], [], 0.0)[0]) != 0:
+                parsed = self.ParseLine(self.tcp_stdout.readline())
+                if parsed != None:
+                    self.SendParsed(parsed)
+                else:
+                    time.sleep(.01)
+            if (time.time() - started) > self.incriment:
+                started = time.time()
+                self.DestroyProcess()
+                time.sleep(.1)
+                self.CreateProcess()
 
 # /usr/sbin/tcpdump -t -n -i eth1 ip host not 129.93.229.226
 def main():
-   tcpdump_proc = subprocess.Popen("/usr/sbin/tcpdump -tn -i eth1 ip host not %s" % host, stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
-   tcp_stdout = tcpdump_proc.stdout
-   tcp_stderr = tcpdump_proc.stderr
-   while len(select.select( [tcp_stderr], [], [], 0.0)[0]) != 0:
-      print tcp_stderr.readline()
+    interface = "eth0"
+    tcpparser = TCPParser(interface)
+    tcpparser.Start()
+   
 
-   ReadOutput(tcp_stdout)
+   
 
 
 if __name__ == "__main__":
