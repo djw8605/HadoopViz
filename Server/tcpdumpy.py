@@ -3,7 +3,7 @@
 
 
 import subprocess
-import sys,re,select,time
+import sys,re,select,time, os, signal
 
 
 from socket import *
@@ -16,12 +16,22 @@ class TCPParser:
         self.process = None
         self.interface = interface
         self.incriment = 21600
+        #self.incriment = 4
         self.sock = socket(AF_INET, SOCK_DGRAM)
         
     def Start(self):
-        self.CreateProcess()
-        self.ReadOutput()
-        pass
+        while 1:
+            fork_pid = os.fork()
+            if fork_pid == 0:
+                print "In Child"
+                self.CreateProcess()
+                self.ReadOutput()
+            else:
+                print "In Parent"
+                time.sleep(self.incriment)
+                self.DestroyProcess(fork_pid)
+                
+        
 
     def CreateProcess(self):
         global host
@@ -31,9 +41,10 @@ class TCPParser:
         while len(select.select( [self.tcp_stderr], [], [], 0.0)[0]) != 0:
             print self.tcp_stderr.readline()
         
-    def DestroyProcess(self):
-        self.tcpdump_proc.terminate()
-        self.tcpdump_proc.kill()
+    def DestroyProcess(self, pid):
+        print "Killing"
+        os.kill(pid, signal.SIGKILL)
+        
         
     def ParseLine(self, line):
         global line_re
@@ -45,7 +56,7 @@ class TCPParser:
         global host
         #if host not in parsed:
         self.sock.sendto("packet " + " ".join( ( parsed[0], parsed[2], parsed[1], parsed[3] ) ), (host, 9345))
-        #print " ".join( (parsed[0], parsed[2], parsed[1], parsed[3]) )
+        print " ".join( (parsed[0], parsed[2], parsed[1], parsed[3]) )
 
     def ReadOutput(self):
         started = time.time()
@@ -56,11 +67,7 @@ class TCPParser:
                     self.SendParsed(parsed)
                 else:
                     time.sleep(.01)
-            if (time.time() - started) > self.incriment:
-                started = time.time()
-                self.DestroyProcess()
-                time.sleep(.1)
-                self.CreateProcess()
+
 
 # /usr/sbin/tcpdump -t -n -i eth1 ip host not 129.93.229.226
 def main():
