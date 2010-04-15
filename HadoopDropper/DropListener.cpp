@@ -243,7 +243,43 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 
 
 
-            }
+
+
+            // condor_execute
+			} else if (strncmp(buf + offset, "condor_execute", strlen("condor_execute")) == 0) {
+
+				//printf("Get ssh\n");
+				TypeInfo bufsType = GetTypeInfo(buf + offset, endofType - buf);
+
+				/* Create and fill the data structure */
+				sd = new SingleDrop();
+				IPandLoc src = _iploc->GetByIP(bufsType.src, 1.0);
+				//src.AddLoad(1.0);
+				IPandLoc dest = _iploc->GetByIP(bufsType.dest, 1.0);
+				//dest.AddLoad(1.0);
+				//printf("%lf\n", dest.GetLoad());
+				sd->dest = dest.GetPoint(); //_iploc->GetLocation(bufsType.dest);
+				sd->src = src.GetPoint(); //_iploc->GetLocation(bufsType.src);
+				sd->pos[0] = sd->src.x;
+				sd->pos[1] = sd->src.y;
+				sd->pos[2] = sd->src.z;
+				sd->dist = Distance(sd->src, sd->dest);
+				sd->scale = ((float) rand() / RAND_MAX) * 1.0 + 3;
+				//printf("scale: %lf", sd->scale);
+				//sd->scale = 3;
+				sd->type = GLOBUS;
+				sd->counter = 0;
+				sd->direction = ToVector(sd->src, sd->dest);
+
+				free(bufsType.dest);
+				free(bufsType.src);
+				(*s).push_back(sd);
+				//Normalize(sd->direction);
+				//printf("src: %lf, %lf, %lf\n", sd->direction.x, sd->direction.y, sd->direction.z);
+
+
+			}
+
             else if (strncmp(buf + offset, "float", 5) == 0)
             {
 
