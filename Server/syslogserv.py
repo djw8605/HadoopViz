@@ -28,6 +28,12 @@ class SysLogServ(object):
         
         self.InitRegex()
        
+# Condor
+# Owner = "dstolee", TriggerEventTypeName = "ULOG_EXECUTE", MyType = "JobAdInformationEvent", 
+# x509userproxysubject = "/DC=org/DC=doegrids/OU=People/CN=Derrick Stolee 464597", 
+# GlobalJobId = "glidein.unl.edu#24438.41610#1270698430", , RemoteHost = "glidein_9678@compute-1-3.nys1",        
+       
+       
     def InitRegex(self):
         self.srcregex = re.compile('src:')
         self.destregex = re.compile('dest:')
@@ -35,7 +41,7 @@ class SysLogServ(object):
         self.sshregex = re.compile(".*<\d+>.*: (\w+) (\w+) for ([\w|\d]+) from ([\d|\.]+)")
         self.packetregex = re.compile("packet ([\d|\.]+) ([\d|\.]+)")
         self.globusregex = re.compile(".*gatekeeper\[\d+\]:.*ion\s+([\d+|\.]+)")
-        self.condorregex = re.compile(".*Cluster\s*=\s*([\d|\w]+)\s*,\s*Proc\s*=\s*([\d|\w]+)\s*,\s*Machine\s*=\s*([\d|\w]+)")
+        self.condorregex = re.compile(".*Owner\s*=\s*([\d|\w]+).*RemoteHost\s*=\s*([\d|\w]+)\s*")
         self.receiveblock = re.compile('Receiving block')
         self.gridftp = re.compile("GRIDFTP")
         
@@ -128,8 +134,9 @@ class SysLogServ(object):
         elif (self.condorregex.match(data)) != None:
             condor_match = self.condorregex.match(data)
             src = host
-            dest = condor_match.group(3)
-            self.SendToConnected(self.connlist, "condor_execute", src, dest)
+            dest = condor_match.group(2)
+            owner = condor_match.group(1)
+            self.SendToConnected(self.connlist, "condor_execute", src, dest, owner)
         
                     
 
