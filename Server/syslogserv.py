@@ -41,7 +41,7 @@ class SysLogServ(object):
         self.sshregex = re.compile(".*<\d+>.*: (\w+) (\w+) for ([\w|\d]+) from ([\d|\.]+)")
         self.packetregex = re.compile("packet ([\d|\.]+) ([\d|\.]+)")
         self.globusregex = re.compile(".*gatekeeper\[\d+\]:.*ion\s+([\d+|\.]+)")
-        self.condorregex = re.compile(".*Owner\s*=\s*([\d|\w]+).*RemoteHost\s*=\s*([\d|\w]+)\s*")
+        self.condorexeregex = re.compile(".*Owner\s*=\s*\"([\d|\w]+)\".*TriggerEventTypeName\s*=\s*\"ULOG_EXECUTE\".*RemoteHost\s*=\s*\"([\d|\w]+)\s*\"")
         self.receiveblock = re.compile('Receiving block')
         self.gridftp = re.compile("GRIDFTP")
         
