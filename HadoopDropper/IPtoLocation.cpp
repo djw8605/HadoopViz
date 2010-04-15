@@ -79,8 +79,8 @@ void IPtoLocation::AddIP(char* ip)
     //p.x = (counter / AREA_SIZE) * SPACE_BETWEEN;
     //p.y = (counter % AREA_SIZE);
     //p.z = 0;
-    p.x = (rand() % 100) - 50;
-    p.y = (rand() % 100) - 50;
+    p.x = (rand() % 150) - 75;
+    p.y = (rand() % 150) - 75;
     p.z = (rand() % 100) - 50;
     IPandLoc iploc(ip, p);
     for(unsigned int i = 0; i < modified_ips.size(); i++)
