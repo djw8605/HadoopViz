@@ -131,7 +131,7 @@ class SysLogServ(object):
             src = self.globusregex.match(data).group(1)
             dest = host[0]
             self.SendToConnected(self.connlist, "globus", src, dest)
-        elif (self.condorregex.match(data)) != None:
+        elif (self.condorexeregex.match(data)) != None:
             condor_match = self.condorregex.match(data)
             src = host
             dest = condor_match.group(2)
