@@ -35,6 +35,7 @@ class SysLogServ(object):
         self.sshregex = re.compile(".*<\d+>.*: (\w+) (\w+) for ([\w|\d]+) from ([\d|\.]+)")
         self.packetregex = re.compile("packet ([\d|\.]+) ([\d|\.]+)")
         self.globusregex = re.compile(".*gatekeeper\[\d+\]:.*ion\s+([\d+|\.]+)")
+        self.condorregex = re.compile(".*Cluster\s*=\s*([\d|\w]+)\s*,\s*Proc\s*=\s*([\d|\w]+)\s*,\s*Machine\s*=\s*([\d|\w]+)")
         self.receiveblock = re.compile('Receiving block')
         self.gridftp = re.compile("GRIDFTP")
         
@@ -124,6 +125,11 @@ class SysLogServ(object):
             src = self.globusregex.match(data).group(1)
             dest = host[0]
             self.SendToConnected(self.connlist, "globus", src, dest)
+        elif (self.condorregex.match(data)) != None:
+            condor_match = self.condorregex.match(data)
+            src = host
+            dest = condor_match.group(3)
+            self.SendToConnected(self.connlist, "condor_execute", src, dest)
         
                     
 
