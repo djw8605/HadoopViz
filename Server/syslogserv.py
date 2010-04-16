@@ -42,7 +42,7 @@ class SysLogServ(object):
         self.packetregex = re.compile("packet ([\d|\.]+) ([\d|\.]+)")
         self.globusregex = re.compile(".*gatekeeper\[\d+\]:.*ion\s+([\d+|\.]+)")
         #self.condorexeregex = re.compile(".*Owner\s*=\s*\"([\d|\w]+)\".*TriggerEventTypeName\s*=\s*\"ULOG_EXECUTE\".*RemoteHost\s*=\s*\"([\d|\w]+)\s*\"")
-        self.condorexeregex = re.compile(r'.*Owner\s*=\s*"([\d\w]+)".*TriggerEventTypeName\s*=\s*"ULOG_EXECUTE".*RemoteHost\s*=\s*"(.*?)"')
+        self.condorregex = re.compile(r'.*Owner\s*=\s*"([\d\w]+)".*TriggerEventTypeName\s*=\s*"(.*?)".*RemoteHost\s*=\s*"(.*?)"')
         self.receiveblock = re.compile('Receiving block')
         self.gridftp = re.compile("GRIDFTP")
         
@@ -132,12 +132,24 @@ class SysLogServ(object):
             src = self.globusregex.match(data).group(1)
             dest = host[0]
             self.SendToConnected(self.connlist, "globus", src, dest)
-        elif (self.condorexeregex.match(data)) != None:
+        elif (self.condorregex.match(data)) != None:
             condor_match = self.condorexeregex.match(data)
             src = host
-            dest = condor_match.group(2)
             owner = condor_match.group(1)
-            self.SendToConnected(self.connlist, "condor_execute", src, dest, owner)
+            type = condor_match.group(2)
+            dest = condor_match.group(3)
+            if type == "ULOG_EXECUTE":
+                self.SendToConnected(self.connlist, "condor_execute", src, dest, owner)
+            # ULOG_JOB_RECONNECT_FAILED, ULOG_JOB_DISCONNECTED, ULOG_EXECUTE, ULOG_JOB_TERMINATED
+            elif type == "ULOG_JOB_RECONNECT_FAILED":
+                self.SendToConnected(self.connlist, "condor_reconnect_failed", src, dest, owner)
+            elif type == "ULOG_JOB_DISCONNECTED":
+                self.SendToConnected(self.connlist, "condor_disconnected", src, dest, owner)
+            elif type == "ULOG_JOB_TERMINATED":
+                self.SendToConnected(self.connlist, "condor_terminated", src, dest, owner)
+            elif type == "ULOG_JOB_EVICTED":
+                self.SendToConnected(self.connlist, "condor_evicted", src, dest, owner)
+                
                     
 
 #<150>GRIDFTP: red-gridftp1 64.253.183.243:33299 READ 1048576

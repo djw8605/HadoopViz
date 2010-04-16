@@ -267,7 +267,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 				sd->scale = ((float) rand() / RAND_MAX) * 1.0 + 3;
 				//printf("scale: %lf", sd->scale);
 				//sd->scale = 3;
-				sd->type = GLOBUS;
+				sd->type = CONDOR_EXE;
 				sd->counter = 0;
 				sd->direction = ToVector(sd->src, sd->dest);
 

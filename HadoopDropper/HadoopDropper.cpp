@@ -72,7 +72,7 @@ void HadoopDropper::Render()
     //printf("before drops render\n");
     drops->Render();
     RenderNodes();
-    this->MouseMove(this->mouse[0], this->mouse[1]);
+    //this->MouseMove(this->mouse[0], this->mouse[1]);
     //RenderFloor();
 
     if(m_cursorOver)
