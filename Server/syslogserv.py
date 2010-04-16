@@ -10,7 +10,7 @@ import optparse
 import threading
 from socket import *
 from select import *
-
+syslogport = 514
 # Sample client trace:
 # <86>sshd[24552]: Accepted publickey for aswearngin from 129.93.229.160 port 42346 ssh2
 # <86>sshd[24494]: Failed password for dweitzel from 129.93.165.2 port 35596 ssh2
@@ -21,7 +21,7 @@ class SysLogServ(object):
     def __init__(self, probeConfig, port=9345):
         self.port = port
         self.udpservSocket = socket(AF_INET, SOCK_DGRAM)
-#        self.syslogSocket =  socket(AF_INET, SOCK_DGRAM)
+        self.syslogSocket =  socket(AF_INET, SOCK_DGRAM)
         self.tcpservSocket = socket(AF_INET,SOCK_STREAM)
         self.bufsize = 2048
         self.hostnames = {}
@@ -41,7 +41,8 @@ class SysLogServ(object):
         self.sshregex = re.compile(".*<\d+>.*: (\w+) (\w+) for ([\w|\d]+) from ([\d|\.]+)")
         self.packetregex = re.compile("packet ([\d|\.]+) ([\d|\.]+)")
         self.globusregex = re.compile(".*gatekeeper\[\d+\]:.*ion\s+([\d+|\.]+)")
-        self.condorexeregex = re.compile(".*Owner\s*=\s*\"([\d|\w]+)\".*TriggerEventTypeName\s*=\s*\"ULOG_EXECUTE\".*RemoteHost\s*=\s*\"([\d|\w]+)\s*\"")
+        #self.condorexeregex = re.compile(".*Owner\s*=\s*\"([\d|\w]+)\".*TriggerEventTypeName\s*=\s*\"ULOG_EXECUTE\".*RemoteHost\s*=\s*\"([\d|\w]+)\s*\"")
+        self.condorexeregex = re.compile(r'.*Owner\s*=\s*"([\d\w]+)".*TriggerEventTypeName\s*=\s*"ULOG_EXECUTE".*RemoteHost\s*=\s*"(.*?)"')
         self.receiveblock = re.compile('Receiving block')
         self.gridftp = re.compile("GRIDFTP")
         
@@ -56,7 +57,7 @@ class SysLogServ(object):
         
         # bind to the port, listen from everywhere
         self.udpservSocket.bind(('', self.port))
-#        self.syslogSocket.bind(('', syslogport))
+        self.syslogSocket.bind(('', syslogport))
         try:
             self.tcpservSocket.bind(('', self.port))
         except:
@@ -72,9 +73,9 @@ class SysLogServ(object):
         selectList = []
         self.connlist.append(self.tcpservSocket)
         self.connlist.append(self.udpservSocket)
-#        self.connlist.append(self.syslogSocket)
-#        self.permlist = [ self.tcpservSocket, self.udpservSocket, self.syslogSocket ]
-        self.permlist = [ self.tcpservSocket, self.udpservSocket ]
+        self.connlist.append(self.syslogSocket)
+        self.permlist = [ self.tcpservSocket, self.udpservSocket, self.syslogSocket ]
+#        self.permlist = [ self.tcpservSocket, self.udpservSocket ]
         #event loop
         while 1:
             parse = None
@@ -108,9 +109,9 @@ class SysLogServ(object):
             if results[0].count(self.udpservSocket) is not 0:
                 data, addr = self.udpservSocket.recvfrom(self.bufsize)
                 self.Parse(data, addr)
-#            if results[0].count(self.syslogSocket) is not 0:
-#                data, addr = self.syslogSocket.recvfrom(self.bufsize)
-#                self.Parse(data)
+            if results[0].count(self.syslogSocket) is not 0:
+                data, addr = self.syslogSocket.recvfrom(self.bufsize)
+                self.Parse(data, addr)
 
 
 # self.sshregex = re.compile(".*<\d+>.*: (\w+) (\w+) for ([\w|\d]+) from ([\d|\.]+)")
@@ -132,12 +133,11 @@ class SysLogServ(object):
             dest = host[0]
             self.SendToConnected(self.connlist, "globus", src, dest)
         elif (self.condorexeregex.match(data)) != None:
-            condor_match = self.condorregex.match(data)
+            condor_match = self.condorexeregex.match(data)
             src = host
             dest = condor_match.group(2)
             owner = condor_match.group(1)
             self.SendToConnected(self.connlist, "condor_execute", src, dest, owner)
-        
                     
 
 #<150>GRIDFTP: red-gridftp1 64.253.183.243:33299 READ 1048576
