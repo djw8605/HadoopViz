@@ -162,9 +162,17 @@ void Camera::ProcessCoordinates(short dot1x, short dot1y, short dot2x, short dot
 void Camera::SetCameraLocation(float X, float Y, float Z, float newCenterX, float newCenterY, float newCenterZ)
 {
 
+    /*
+
     confCenterX = X;
     confCenterY = Y;
     confCenterZ = Z;
+
+    */
+
+	eyeX = X;
+	eyeY = Y;
+	eyeZ = Z;
     centerX = newCenterX;
     centerY = newCenterY;
     centerZ = newCenterZ;

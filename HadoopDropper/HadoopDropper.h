@@ -30,6 +30,10 @@ private:
     void RenderNodes();
     void RenderSelected();
     void InitDisplayLists();
+    point * m_selectedPoint;
+    bool m_selected;
+    bool m_checkselect;
+    char* m_clickedHost;
     char* m_selectHost;
     int mouse[2];
     char* m_selectIP;

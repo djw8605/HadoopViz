@@ -41,6 +41,9 @@ HadoopDropper::HadoopDropper()
     m_totalFloor = 0;
     this->m_selectHost = 0;
     this->m_selectIP = 0;
+    this->m_selectedPoint = 0;
+    this->m_selected = 0;
+    this->m_clickedHost = 0;
 }
 
 HadoopDropper::~HadoopDropper()
@@ -62,20 +65,47 @@ void HadoopDropper::Render()
 
 
 
-    _camera->positionCamera();
+
     float buf[3];
     _camera->GetPosition(buf);
-    _camera->SetCameraLocation(buf[0], buf[1], buf[2], 0, 0,  0);
+    static float savedPos[3] = {buf[0], buf[1], buf[2]};
+    if (this->m_selected)
+    {
+    	//printf("%lf, %lf, %lf\n", buf[0] - this->m_selectedPoint->x, buf[1] - this->m_selectedPoint->y, buf[2] - this->m_selectedPoint->z);
+    	_camera->SetCameraLocation(
+    	    			buf[0],
+    	    			buf[1],
+    	    			this->m_selectedPoint->z,
+    	    			this->m_selectedPoint->x, this->m_selectedPoint->y,
+    	    			this->m_selectedPoint->z);
+    	/*_camera->SetCameraLocation(
+    			buf[0] + ((this->m_selectedPoint->x - buf[0])/(10.0 * getTime())),
+    			buf[1] + ((this->m_selectedPoint->y - buf[1])/(10.0 * getTime())),
+    			buf[2] + ((this->m_selectedPoint->z - buf[2])/(10.0 * getTime())),
+    			this->m_selectedPoint->x, this->m_selectedPoint->y,
+    			this->m_selectedPoint->z);
+    			*/
+    	_camera->ModifyRotationRadius((10.0 - _camera->GetRotationRadius()) / 100.0);
+    }
+    else
+    {
+    	//printf("%lf\n", (150.0 - _camera->GetRotationRadius()) / 100.0);
+    	_camera->SetCameraLocation(buf[0], buf[1], savedPos[2], 0, 0,  0);
+    	_camera->ModifyRotationRadius((200.0 - _camera->GetRotationRadius()) / 100.0);
+
+    }
+
+    _camera->positionCamera();
     glPushMatrix();
 
 
     //printf("before drops render\n");
     drops->Render();
     RenderNodes();
-    //this->MouseMove(this->mouse[0], this->mouse[1]);
+    this->MouseMove(this->mouse[0], this->mouse[1]);
     //RenderFloor();
 
-    if(m_cursorOver)
+    if(this->m_cursorOver || this->m_selected)
     {
         _cursor->Render();
         RenderSelected();
@@ -279,6 +309,16 @@ void HadoopDropper::DeInit()
 }
 void HadoopDropper::Select(int x, int y)
 {
+	// Get the object the mouse is over
+	this->m_checkselect = true;
+	this->MouseMove(x, y);
+	this->m_checkselect = false;
+
+	// If the mouse is over something, focus on it
+	if(this->m_selectedPoint)
+		this->m_selected = true;
+	else
+		this->m_selected = false;
 }
 
 void HadoopDropper::MouseMove(int x, int y)
@@ -357,6 +397,9 @@ void HadoopDropper::MouseMove(int x, int y)
 		distloc dl2 = Intersect(r, clickBox[0], clickBox[1], clickBox[2],
 				clickBox[3]);
 
+
+
+
 		if (dl.distance || dl2.distance) {
 			m_intercept = dl;
 			//printf("Over the floor\n");
@@ -365,6 +408,23 @@ void HadoopDropper::MouseMove(int x, int y)
 
 			m_cursorOver = true;
 			_cursor->SetScreenCoords(dl.intPoint);
+
+			if (this->m_checkselect)
+			{
+				printf("Setting selectedPoint\n");
+
+				if (this->m_selectedPoint)
+					delete this->m_selectedPoint;
+				this->m_selectedPoint = new point;
+				*m_selectedPoint = _iploc->GetInfo(i).GetPos();
+
+				if (this->m_clickedHost)
+					delete m_clickedHost;
+				this->m_clickedHost = new char[strlen(this->m_selectHost) + 1];
+				strcpy(this->m_clickedHost, this->m_selectHost);
+				printf("%s\n", this->m_clickedHost);
+
+			}
 
 			/* Delete the current host */
 			if (this->m_selectIP && (strcmp(this->m_selectIP, _iploc->GetIP(i))
@@ -375,6 +435,10 @@ void HadoopDropper::MouseMove(int x, int y)
 			delete[] this->m_selectIP;
 			this->m_selectIP = new char[strlen(_iploc->GetIP(i)) + 1];
 			strcpy(this->m_selectIP, _iploc->GetIP(i));
+
+			// For the mouse click
+
+
 
 			/* Get the hostname of the host */
 			//hostent* server = gethostbyname(this->m_selectIP);
@@ -403,12 +467,28 @@ void HadoopDropper::MouseMove(int x, int y)
 				//printf("%s\n", this->m_selectIP);
 
 			}
+
+
 			break;
 
 		} else {
 			if (!_camera->IsRotating())
 				_camera->Rotate(ROTATE_SPEED);
 			m_cursorOver = false;
+
+			// For mouse click
+
+
+			if (this->m_selectedPoint && this->m_checkselect)
+			{
+				printf("Removing selecting point\n");
+				delete this->m_selectedPoint;
+				this->m_selectedPoint = 0;
+				delete this->m_clickedHost;
+				this->m_clickedHost = 0;
+
+			}
+
 		}
 
 
@@ -674,6 +754,12 @@ void HadoopDropper::RenderSelected()
     	sprintf(buf, "%s", this->m_selectHost);
     	_seldisp->SetText(buf);
 
+    }
+    else if (this->m_selected && this->m_clickedHost)
+    {
+    	char buf[100];
+    	sprintf(buf, "%s", this->m_clickedHost);
+    	_seldisp->SetText(buf);
     }
 
     //printf("Size: %i\n\n", _iploc->GetSize());

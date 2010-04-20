@@ -74,6 +74,13 @@ void keyboard(unsigned char key, int x, int y)
 
 }
 
+void mouseClick(int x, int y)
+{
+	GetDisplayed()->Select(x, y);
+
+
+}
+
 
 
 void specialKeyboard(int key, int x, int y)

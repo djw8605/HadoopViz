@@ -31,6 +31,7 @@ public:
 	void NextFrame();
 
 	void ModifyRotationRadius(float amount);
+	float GetRotationRadius() { return this->m_radius; };
 
 private:
 

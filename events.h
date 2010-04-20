@@ -16,4 +16,7 @@ void specialKeyboard(int key, int x, int y);
 /* Mouse move events */
 void mouseMove(int x, int y);
 
+/* Mouse click events */
+void mouseClick(int x, int y);
+
 #endif /*EVENTS_H_*/

@@ -190,6 +190,9 @@ int main(int argc, char *argv[])
 
                 break;
 
+            case SDL_MOUSEBUTTONDOWN:
+            	mouseClick(event.button.x, event.button.y);
+
             }
         }
         display();
