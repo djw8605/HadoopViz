@@ -66,18 +66,20 @@ void HadoopDropper::Render()
 
 
 
-    float buf[3];
+    float buf[6];
     _camera->GetPosition(buf);
     static float savedPos[3] = {buf[0], buf[1], buf[2]};
     if (this->m_selected)
     {
-    	//printf("%lf, %lf, %lf\n", buf[0] - this->m_selectedPoint->x, buf[1] - this->m_selectedPoint->y, buf[2] - this->m_selectedPoint->z);
+    	//printf("%lf, %lf, %lf\n", this->m_selectedPoint->x, this->m_selectedPoint->y, this->m_selectedPoint->z);
+    	// Most of this is for smooth transition
     	_camera->SetCameraLocation(
     	    			buf[0],
     	    			buf[1],
-    	    			this->m_selectedPoint->z,
-    	    			this->m_selectedPoint->x, this->m_selectedPoint->y,
-    	    			this->m_selectedPoint->z);
+    	    			buf[2] + (this->m_selectedPoint->z - buf[2])/100.0,
+    	    			buf[3] + (this->m_selectedPoint->x - buf[3])/100.0,
+    	    			buf[4] + (this->m_selectedPoint->y - buf[4])/100.0,
+    	    			buf[5] + (this->m_selectedPoint->z - buf[5])/100.0);
     	/*_camera->SetCameraLocation(
     			buf[0] + ((this->m_selectedPoint->x - buf[0])/(10.0 * getTime())),
     			buf[1] + ((this->m_selectedPoint->y - buf[1])/(10.0 * getTime())),
@@ -90,7 +92,7 @@ void HadoopDropper::Render()
     else
     {
     	//printf("%lf\n", (150.0 - _camera->GetRotationRadius()) / 100.0);
-    	_camera->SetCameraLocation(buf[0], buf[1], savedPos[2], 0, 0,  0);
+    	_camera->SetCameraLocation(buf[0], buf[1], buf[2] + (savedPos[2] - buf[2])/100.0, 0, 0,  0);
     	_camera->ModifyRotationRadius((200.0 - _camera->GetRotationRadius()) / 100.0);
 
     }
@@ -362,7 +364,7 @@ void HadoopDropper::MouseMove(int x, int y)
         r.direction.z = (float)pos3D_z - r.origin.z;
 
         //printf("Ray, o = (%lf, %lf, %lf), d = (%lf, %lf, %lf)\n", r.origin.x, r.origin.y, r.origin.z, r.direction.x, r.direction.y, r.direction.z);
-        float buf[3];
+        float buf[6];
         _camera->GetPosition(buf);
         //printf("camera: %lf, %lf, %lf\n", buf[0], buf[1], buf[2]);
 

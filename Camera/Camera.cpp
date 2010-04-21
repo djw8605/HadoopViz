@@ -201,6 +201,10 @@ void Camera::GetPosition(float* buf)
     buf[1] = eyeY;
     buf[2] = eyeZ;
 
+    buf[3] = centerX;
+    buf[4] = centerY;
+    buf[5] = centerZ;
+
     return;
 
 }
