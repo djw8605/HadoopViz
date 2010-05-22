@@ -6,7 +6,7 @@
 #include "display.h"
 #include "events.h"
 #include "init.h"
-#include "config.h"
+#include "defaults.h"
 #include <unistd.h>
 #include "Camera/Camera.h"
 #include <getopt.h>

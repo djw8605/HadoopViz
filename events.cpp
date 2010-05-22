@@ -7,7 +7,7 @@
  *
  */
 
-#include "config.h"
+#include "defaults.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
 //#include <GL/glut.h>

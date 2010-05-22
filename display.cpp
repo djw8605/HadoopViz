@@ -14,7 +14,7 @@
 #include "Camera/Camera.h"
 #include "AbstractScene/AbstractScene.h"
 #include "FreeType/FreeType.h"
-#include "config.h"
+#include "defaults.h"
 //#include "TextPrinter/BitMapText.h"
 
 #ifndef NO_AUDIO

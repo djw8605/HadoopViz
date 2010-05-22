@@ -11,7 +11,7 @@
 
 #include "Math/Math.h"
 #include "IPtoLocation.h"
-#include "config.h"
+#include "defaults.h"
 
 
 /* Note to self

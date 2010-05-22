@@ -20,7 +20,7 @@
 #include "Drops.h"
 #include "Math/Math.h"
 #include "HadoopDropper/IPtoLocation.h"
-#include "config.h"
+#include "defaults.h"
 #include "HadoopDropper/SingleDrop.h"
 #include "display.h"
 

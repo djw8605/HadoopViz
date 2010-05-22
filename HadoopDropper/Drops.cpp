@@ -15,7 +15,7 @@
 #include "HadoopDropper/DropListener.h"
 #include "Drops.h"
 #include <stdio.h>
-#include "config.h"
+#include "defaults.h"
 
 
 #ifdef USE_VBO

@@ -11,11 +11,10 @@
 #include <GL/glx.h>
 #include <cmath>
 
-#include <config.h>
+#include "defaults.h"
 #include "HadoopDropper.h"
 #include "HadoopDropper/Drops.h"
 #include <Camera/Camera.h>
-#include "config.h"
 #include "Math/Math.h"
 #include "Cursor/Cursor.h"
 #include "HadoopDropper/IPtoLocation.h"
