@@ -12,7 +12,7 @@ AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
-AM_PATH_SDL([1.2.14])
+AM_PATH_SDL([1.2.10])
 AC_CHECK_PROGS([sdl], [sdl-config], [:])
 if test "$sdl" = :; then
   AC_MSG_ERROR([HadoopViz needs sdl-config in the path])
