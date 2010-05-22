@@ -1,6 +1,8 @@
 
 AM_CPPFLAGS = $(SDL_CFLAGS) $(FT2_CFLAGS) -DNO_AUDIO
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 ACLOCAL_AMFLAGS = -I m4
 bin_PROGRAMS = hadoopviz
 
