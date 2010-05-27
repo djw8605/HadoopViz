@@ -269,6 +269,8 @@ class SysLogServ(object):
         self.clientregex = re.compile('.*<\d+>([\w]+\s+\d{1,2} \d{2,2}:\d{2,2}:\d{2,2}).*INFO.*DataNode\.clienttrace: src: /([\d\./]+):\d+, dest: /([\d\./]+):\d+, bytes: (\d+), op: (\w+)')
         self.receiveblock = re.compile('Receiving block')
         self.gridftp = re.compile("GRIDFTP")
+        dcache_client = re.compile(".*pool:w-([\w|\d]+).*DCap-[\d|\.]+,([\w|\d]+)")
+        dcache_gridftp = re.compile(".*door:GFTP-([\w|\d]+).*Domain:(\w+)")
         
     def GetSrcDest(self, line):
         srcpos = self.srcregex.search(line).end()+2
@@ -360,6 +362,15 @@ class SysLogServ(object):
                self.hostnames[dest] = prettyDest
                print "Adding %s as %s" % (dest, prettyDest)
             self.SendToConnected(self.connlist, "recvblock", prettySrc, prettyDest)
+
+        elif dcache_client.search(data):
+            src,dest = dcache_client.search(data).groups()
+            self.SendToConnected(self.connlist, "clienttrace", src, dest)
+
+        elif dcache_gridftp.search(data):
+            src,operation = dcache_gridftp.search(data).groups()
+            if operation == "request":
+                self.SendToConnected(self.connlist, "float", src, "")
         elif client_match:
             time, src, dest, bytes, op = client_match.groups()
             if self.hostnames.has_key(src):
