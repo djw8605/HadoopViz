@@ -165,6 +165,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 
                 free(bufsType.dest);
                 free(bufsType.src);
+                free(bufsType.extra);
                 //Normalize(sd->direction);
                 (*s).push_back(sd);
 
@@ -188,7 +189,15 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 				sd->pos[1] = sd->src.y;
 				sd->pos[2] = sd->src.z;
 				sd->dist = Distance(sd->src, sd->dest);
-                sd->scale = ((float)rand() / RAND_MAX)*1.0+3;
+				float size;
+				sscanf(bufsType.extra, "%f", &size);
+				static float max_size = size;
+				if(size > max_size)
+					max_size = size*0.5;
+				sd->scale = max(min((double)((float)size/((float)size + max_size)), 1.0), 0.3);
+				if ( (sd->scale > 1.0) || (sd->scale < 0.0))
+					printf("scale = %lf, size = %f, max_size = %i\n", sd->scale, size, max_size);
+                //sd->scale = ((float)rand() / RAND_MAX)*1.0+3;
                 //printf("scale: %lf", sd->scale);
                 //sd->scale = 3;
                 sd->type = CLIENT_TRACE;
@@ -198,6 +207,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 
                 free(bufsType.dest);
                 free(bufsType.src);
+                free(bufsType.extra);
                 (*s).push_back(sd);
                 //Normalize(sd->direction);
                 //printf("src: %lf, %lf, %lf\n", sd->direction.x, sd->direction.y, sd->direction.z);
@@ -232,6 +242,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 //free(bufsType.dest);
                 free(bufsType.src);
                 free(bufsType.dest);
+                free(bufsType.extra);
                 (*s).push_back(sd);
 
             }
@@ -266,6 +277,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 //printf("doing float: %s\n", bufsType.src);
                 free(bufsType.src);
                 free(bufsType.dest);
+                free(bufsType.extra);
                 (*s).push_back(sd);
 
             }
@@ -319,6 +331,23 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 TypeInfo DropListener::GetTypeInfo(char* buf, int size)
 {
     TypeInfo toReturn;
+
+    char* formatted_buf = new char[size+1];
+    strncpy(formatted_buf, buf, size);
+    formatted_buf[size] = '\0';
+    char type[64], src_ip[64], dst_ip[64], extra[128];
+
+    // Get the information.
+    sscanf(formatted_buf, "%s %s %s %s", type, src_ip, dst_ip, extra);
+    //printf("type = %s, src_ip = %s, dst_ip = %s, extra = %s\n", type, src_ip, dst_ip, extra);
+    toReturn.src = new char[strlen(src_ip)];
+    strcpy(toReturn.src, src_ip);
+    toReturn.dest = new char[strlen(dst_ip)];
+    strcpy(toReturn.dest, dst_ip);
+    toReturn.extra = new char[strlen(extra)];
+    strcpy(toReturn.extra, extra);
+
+    return toReturn;
 
     // Get the first ip, the string after the first space
     char* firstIP = strchr(buf, ' ') + 1;

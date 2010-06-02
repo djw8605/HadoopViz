@@ -255,6 +255,8 @@ void Drops::RenderDrop(SingleDrop* s)
         */
         s->pos[2] = ( - ( pow( ((2.0/s->dist) * (s->counter*s->dist) ) - 1.0, 2) )+1.0) * (s->dist/2);
 
+
+
     }
     else if((s->type == DROP) || (s->type==FLOAT))
     {
@@ -281,7 +283,11 @@ void Drops::RenderDrop(SingleDrop* s)
 
     glTranslatef(s->pos[0], s->pos[1], s->pos[2]);
     glColor4f(1.0, 1.0, 1.0, 1.0);
-    glScalef(0.1, 0.1, 0.1);
+    //printf("%lf\n", s->scale);
+    if (s->type == CLIENT_TRACE)
+    	glScalef(s->scale, s->scale, s->scale);
+    else
+        glScalef(0.1, 0.1, 0.1);
 
     /* Invert the raindrop */
     if(s->type == FILE_OPEN || s->type == FLOAT)

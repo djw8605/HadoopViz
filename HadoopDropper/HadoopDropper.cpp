@@ -139,6 +139,7 @@ void HadoopDropper::Init()
 
     /* INDEX ARRAY (floor) */
     this->m_numTiles = pow((double)((int)AREA_SIZE/SPACE_BETWEEN),2);
+    printf("numtiles = %i\n", this->m_numTiles);
     this->m_tileIndices = new GLubyte[this->m_numTiles*4];
     //printf("numTiles = %i\n", this->m_numTiles);
     int numInRow = AREA_SIZE/SPACE_BETWEEN;
@@ -405,7 +406,7 @@ void HadoopDropper::RenderFloor()
 		}
 
     	/* Increase the size of the intersect area, for selection */
-    	for (int i = _iploc->GetSize() - (AREA_SIZE / SPACE_BETWEEN); i
+    	for (int i = _iploc->GetSize() - pow((float)(AREA_SIZE / SPACE_BETWEEN), 2); i
 				< _iploc->GetSize(); i++) {
 			p = _iploc->GetLocation(i);
 
