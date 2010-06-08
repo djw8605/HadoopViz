@@ -71,7 +71,7 @@ def daemonize(pidfile):
       os._exit(0)       # Exit parent of the first child.
 
 syslogport = 514
-clientport = 5679
+clientport = 9345
 
 # Sample client trace:
 # 2009-07-24 07:59:13,012 INFO org.apache.hadoop.hdfs.server.datanode.DataNode.clienttrace: src: /172.16.1.144:50010, dest: /172.16.1.104:36825, bytes: 66048, op: HDFS_READ, cliID: DFSClient_-541008184, srvID: DS-824630517-172.16.1.144-50010-1234487017305, blockid: blk_-2994819911287448111_787295
@@ -254,7 +254,7 @@ class SysLogServ(object):
         self.clientport = clientport
         self.syslogport = syslogport
         self.udpservSocket = socket(AF_INET, SOCK_DGRAM)
-        self.syslogSocket =  socket(AF_INET, SOCK_DGRAM)
+        #self.syslogSocket =  socket(AF_INET, SOCK_DGRAM)
         self.tcpservSocket = socket(AF_INET,SOCK_STREAM)
         self.bufsize = 2048
         self.hostnames = {}
@@ -269,8 +269,11 @@ class SysLogServ(object):
         self.clientregex = re.compile('.*<\d+>([\w]+\s+\d{1,2} \d{2,2}:\d{2,2}:\d{2,2}).*INFO.*DataNode\.clienttrace: src: /([\d\./]+):\d+, dest: /([\d\./]+):\d+, bytes: (\d+), op: (\w+)')
         self.receiveblock = re.compile('Receiving block')
         self.gridftp = re.compile("GRIDFTP")
-        dcache_client = re.compile(".*pool:w-([\w|\d]+).*DCap-[\d|\.]+,([\w|\d]+)")
-        dcache_gridftp = re.compile(".*door:GFTP-([\w|\d]+).*Domain:(\w+)")
+
+        #<134>06.01 14:00:41 [pool:w-cmsstor90-3@w-cmsstor90-3Domain:transfer] [000C00000000000005CE3D68,84644940] [Unknown] cms.resilient@enstore 84530321 61742 false {DCap-3.0,cmswn1897.fnal.gov:42811} [door:DCap0-cmsdcdr2-Unknown-1416285@dcap0-cmsdcdr2Domain:1275418779801-8854515] {0:""}
+        self.dcache_client = re.compile(".*pool:\w-([\w|\d]+).*\[[\w|\d]+,([\d]+).*DCap-[\d|\.]+,([\w|\d]+)")
+        self.dcache_gridftp = re.compile(".*door:GFTP-([\w|\d]+).*Domain:(\w+)")
+        self.dcache_transfer = re.compile(".*Buffer Sizes.*")
         
     def GetSrcDest(self, line):
         srcpos = self.srcregex.search(line).end()+2
@@ -283,7 +286,7 @@ class SysLogServ(object):
         
         # bind to the port, listen from everywhere
         self.udpservSocket.bind(('', self.clientport))
-        self.syslogSocket.bind(('', self.syslogport))
+        #self.syslogSocket.bind(('', self.syslogport))
         self.tcpservSocket.bind(('', self.clientport))
         self.tcpservSocket.listen(3)
        
@@ -300,7 +303,7 @@ class SysLogServ(object):
         selectList = []
         selectList.append(self.tcpservSocket)
         selectList.append(self.udpservSocket)
-        selectList.append(self.syslogSocket)
+        #selectList.append(self.syslogSocket)
         #event loop
         while 1:
             parse = None
@@ -331,10 +334,11 @@ class SysLogServ(object):
             
             if results[0].count(self.udpservSocket) is not 0:
                 data, addr = self.udpservSocket.recvfrom(self.bufsize)
+                #print data
                 self.Parse(data)
-            if results[0].count(self.syslogSocket) is not 0:
-                data, addr = self.syslogSocket.recvfrom(self.bufsize)
-                self.Parse(data)
+            #if results[0].count(self.syslogSocket) is not 0:
+            #    data, addr = self.syslogSocket.recvfrom(self.bufsize)
+            #    self.Parse(data)
 
 
 
@@ -363,14 +367,20 @@ class SysLogServ(object):
                print "Adding %s as %s" % (dest, prettyDest)
             self.SendToConnected(self.connlist, "recvblock", prettySrc, prettyDest)
 
-        elif dcache_client.search(data):
-            src,dest = dcache_client.search(data).groups()
-            self.SendToConnected(self.connlist, "clienttrace", src, dest)
+        elif self.dcache_client.search(data):
+            src,size,dest = self.dcache_client.search(data).groups()
+            #print "Got client"
+            self.SendToConnected(self.connlist, "clienttrace", src, dest, size)
 
-        elif dcache_gridftp.search(data):
-            src,operation = dcache_gridftp.search(data).groups()
+        elif self.dcache_gridftp.search(data):
+            #print "Got gridftp"
+            src,operation = self.dcache_gridftp.search(data).groups()
             if operation == "request":
                 self.SendToConnected(self.connlist, "float", src, "")
+            else:
+                self.SendToConnected(self.connlist, "drop", src, "")
+        elif self.dcache_transfer.search(data):
+            print data
         elif client_match:
             time, src, dest, bytes, op = client_match.groups()
             if self.hostnames.has_key(src):
