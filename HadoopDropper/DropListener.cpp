@@ -107,6 +107,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
     char buf[bufSize];
     buf[bufSize-1]='\0';
     SingleDrop* sd;
+    static float max_size = 0;
     while (CheckReadable(sock))
     {
 
@@ -154,14 +155,21 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 sd->dest = dest.GetPoint(); //_iploc->GetLocation(bufsType.dest);
                 sd->src = src.GetPoint(); //_iploc->GetLocation(bufsType.src);
                 sd->pos[0] = sd->src.x;
-                sd->pos[1] = sd->src.y;
-                sd->pos[2] = sd->src.z;
-                sd->dist = Distance(sd->src, sd->dest);
-                sd->scale =3;
-                //sd->type = RECV_BLOCK;
-                sd->type = CLIENT_TRACE;
-                sd->counter = 0;
-                sd->direction = ToVector(sd->src, sd->dest);
+				sd->pos[1] = sd->src.y;
+				sd->pos[2] = sd->src.z;
+				sd->dist = Distance(sd->src, sd->dest);
+				float size;
+				sscanf(bufsType.extra, "%f", &size);
+				if (size * 0.9 > max_size)
+				{
+					max_size = size * 0.9;
+					//printf("Max Size = %lf\n", max_size);
+				}
+				sd->scale = max(min((double) ((float) size / ((float) size + max_size)), 0.8), 0.2);
+				//sd->type = RECV_BLOCK;
+				sd->type = CLIENT_TRACE;
+				sd->counter = 0;
+				sd->direction = ToVector(sd->src, sd->dest);
 
                 free(bufsType.dest);
                 free(bufsType.src);
@@ -191,10 +199,12 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 				sd->dist = Distance(sd->src, sd->dest);
 				float size;
 				sscanf(bufsType.extra, "%f", &size);
-				static float max_size = size;
-				if(size > max_size)
-					max_size = size*0.5;
-				sd->scale = max(min((double)((float)size/((float)size + max_size)), 1.0), 0.3);
+				if(size*0.9 > max_size)
+				{
+					max_size = size*0.9;
+					//printf("Max Size = %lf\n", max_size);
+				}
+				sd->scale = max(min((double)((float)size/((float)size + max_size)), 0.8), 0.2);
 				if ( (sd->scale > 1.0) || (sd->scale < 0.0))
 					printf("scale = %lf, size = %f, max_size = %i\n", sd->scale, size, max_size);
                 //sd->scale = ((float)rand() / RAND_MAX)*1.0+3;

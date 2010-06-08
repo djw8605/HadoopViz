@@ -285,7 +285,11 @@ void Drops::RenderDrop(SingleDrop* s)
     glColor4f(1.0, 1.0, 1.0, 1.0);
     //printf("%lf\n", s->scale);
     if (s->type == CLIENT_TRACE)
+    {
     	glScalef(s->scale, s->scale, s->scale);
+    	if (s->scale > 1.0)
+    		printf("%lf\n", s->scale);
+    }
     else
         glScalef(0.1, 0.1, 0.1);
 

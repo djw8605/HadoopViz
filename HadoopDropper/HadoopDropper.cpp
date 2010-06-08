@@ -112,6 +112,38 @@ void HadoopDropper::Init()
     m_floorpoints[2] = FillPoint(l_edges, l_edges, 0.0);
     m_floorpoints[3] = FillPoint(l_edges, r_edges, 0.0);
 */
+
+/*
+    // Vertex array for a row
+    this->m_numVertices = 4 * 3 * (POSITIONS_PER_ROW + 1);
+    this->m_floorVertices = new GLfloat[this->m_numVertices];
+    for(int i = 0; i < POSITIONS_PER_ROW; i++)
+    {
+    	// Bottom left
+    	this->m_floorVertices[(i * 4)]     = (GLfloat) i;
+		this->m_floorVertices[(i * 4) + 1] = (GLfloat) 0.0;
+		this->m_floorVertices[(i * 4) + 2] = (GLfloat) 0.0;
+
+		// Top left
+		this->m_floorVertices[(i * 4) + 3] = (GLfloat) i;
+		this->m_floorVertices[(i * 4) + 4] = (GLfloat) 1.0;
+		this->m_floorVertices[(i * 4) + 5] = (GLfloat) 0.0;
+
+		// Top right
+		this->m_floorVertices[(i * 4) + 6] = (GLfloat) i + 1.0;
+		this->m_floorVertices[(i * 4) + 7] = (GLfloat) 1.0;
+		this->m_floorVertices[(i * 4) + 8] = (GLfloat) 0.0;
+
+		// Bottom right
+		this->m_floorVertices[(i * 4) + 9] = (GLfloat) i + 1.0;
+		this->m_floorVertices[(i * 4) + 10] = (GLfloat) 0.0;
+		this->m_floorVertices[(i * 4) + 11] = (GLfloat) 0.0;
+
+
+    }
+
+*/
+
     m_floorpoints[0] = FillPoint(-(float)SPACE_BETWEEN/2.0, -(float)SPACE_BETWEEN/2.0, 0.0);
     m_floorpoints[1] = FillPoint(-(float)SPACE_BETWEEN/2.0, 0.0, 0.0);
     m_floorpoints[2] = FillPoint(0.0, 0.0, 0.0);
