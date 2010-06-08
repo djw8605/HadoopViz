@@ -71,7 +71,7 @@ def daemonize(pidfile):
       os._exit(0)       # Exit parent of the first child.
 
 syslogport = 514
-clientport = 9345
+clientport = 5679
 
 # Sample client trace:
 # 2009-07-24 07:59:13,012 INFO org.apache.hadoop.hdfs.server.datanode.DataNode.clienttrace: src: /172.16.1.144:50010, dest: /172.16.1.104:36825, bytes: 66048, op: HDFS_READ, cliID: DFSClient_-541008184, srvID: DS-824630517-172.16.1.144-50010-1234487017305, blockid: blk_-2994819911287448111_787295
@@ -254,7 +254,7 @@ class SysLogServ(object):
         self.clientport = clientport
         self.syslogport = syslogport
         self.udpservSocket = socket(AF_INET, SOCK_DGRAM)
-        #self.syslogSocket =  socket(AF_INET, SOCK_DGRAM)
+        self.syslogSocket =  socket(AF_INET, SOCK_DGRAM)
         self.tcpservSocket = socket(AF_INET,SOCK_STREAM)
         self.bufsize = 2048
         self.hostnames = {}
@@ -286,7 +286,7 @@ class SysLogServ(object):
         
         # bind to the port, listen from everywhere
         self.udpservSocket.bind(('', self.clientport))
-        #self.syslogSocket.bind(('', self.syslogport))
+        self.syslogSocket.bind(('', self.syslogport))
         self.tcpservSocket.bind(('', self.clientport))
         self.tcpservSocket.listen(3)
        
@@ -303,7 +303,7 @@ class SysLogServ(object):
         selectList = []
         selectList.append(self.tcpservSocket)
         selectList.append(self.udpservSocket)
-        #selectList.append(self.syslogSocket)
+        selectList.append(self.syslogSocket)
         #event loop
         while 1:
             parse = None
@@ -336,9 +336,9 @@ class SysLogServ(object):
                 data, addr = self.udpservSocket.recvfrom(self.bufsize)
                 #print data
                 self.Parse(data)
-            #if results[0].count(self.syslogSocket) is not 0:
-            #    data, addr = self.syslogSocket.recvfrom(self.bufsize)
-            #    self.Parse(data)
+            if results[0].count(self.syslogSocket) is not 0:
+                data, addr = self.syslogSocket.recvfrom(self.bufsize)
+                self.Parse(data)
 
 
 
@@ -403,7 +403,7 @@ class SysLogServ(object):
                self.hostnames[dest] = prettyDest
                print "Adding %s as %s" % (dest, prettyDest)
 
-            self.SendToConnected(self.connlist, "clienttrace", prettySrc, prettyDest)
+            self.SendToConnected(self.connlist, "clienttrace", prettySrc, prettyDest, bytes)
 
             if self.recordKeeper:
                 self.recordKeeper(time, src, dest, int(bytes), op)
