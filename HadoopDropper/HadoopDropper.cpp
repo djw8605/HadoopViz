@@ -171,8 +171,8 @@ void HadoopDropper::Init()
 
     /* INDEX ARRAY (floor) */
     this->m_numTiles = pow((double)((int)AREA_SIZE/SPACE_BETWEEN),2);
-    printf("numtiles = %i\n", this->m_numTiles);
-    this->m_tileIndices = new GLubyte[this->m_numTiles*4];
+    //printf("numtiles = %i\n", this->m_numVertices);
+    this->m_tileIndices = new GLuint[this->m_numTiles*4];
     //printf("numTiles = %i\n", this->m_numTiles);
     int numInRow = AREA_SIZE/SPACE_BETWEEN;
     for(int i = 0; i < this->m_numTiles; i++)
@@ -193,8 +193,8 @@ void HadoopDropper::Init()
     }
 
     /* COLOR ARRAY (floor) */
-    this->m_floorColors = new GLubyte[this->m_numVertices];
-    for(int i = 0; i < this->m_numVertices/3; i++)
+    this->m_floorColors = new GLubyte[this->m_numVertices*3];
+    for(int i = 0; i < this->m_numVertices*3; i++)
     {
     	this->m_floorColors[i*3] = 0;
     	this->m_floorColors[i*3+1] = 255;
@@ -212,14 +212,14 @@ void HadoopDropper::Init()
 void HadoopDropper::InitDisplayLists()
 {
 
-	glPushMatrix();
-	glLoadIdentity();
+	//glPushMatrix();
+	//glLoadIdentity();
 
-	glColor4f(0.5, 0.5, 1.0, 1.0);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, this->m_floorVertices);
-	glDrawElements(GL_QUADS, 100, GL_UNSIGNED_BYTE, this->m_tileIndices);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	//glColor4f(0.5, 0.5, 1.0, 1.0);
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glVertexPointer(3, GL_FLOAT, 0, this->m_floorVertices);
+	//glDrawElements(GL_QUADS, 100, GL_UNSIGNED_BYTE, this->m_tileIndices);
+	//glDisableClientState(GL_VERTEX_ARRAY);
 
     /*glDeleteLists(m_floorList, 1);
 	glDeleteLists(m_floorTile, 1);
@@ -288,7 +288,7 @@ void HadoopDropper::InitDisplayLists()
 		m_supportLists = true;
 	}
 	*/
-	glPopMatrix();
+	//glPopMatrix();
 
 
 }
@@ -455,7 +455,7 @@ void HadoopDropper::RenderFloor()
     	float buf[3];
     	_camera->GetPosition(buf);
     	_camera->SetCameraLocation(buf[0], buf[1], buf[2], (m_floorpoints[2].x - m_floorpoints[0].x)/2, (m_floorpoints[2].y - m_floorpoints[0].y)/2,  10.0);
-
+    	//printf("size = %i\n", this->m_floorSize);
     	//printf("resizing floor to: %i\n%i\n", m_floorSize, m_totalFloor);
     }
 
@@ -480,21 +480,23 @@ void HadoopDropper::RenderFloor()
 	glEnableClientState( GL_COLOR_ARRAY);
 	glColorPointer(3, GL_UNSIGNED_BYTE, 0, this->m_floorColors);
 	glVertexPointer(3, GL_FLOAT, 0, this->m_floorVertices);
-	glDrawElements(GL_QUADS, _iploc->GetSize() * 4, GL_UNSIGNED_BYTE, this->m_tileIndices);
+	glDrawElements(GL_QUADS, _iploc->GetSize() * 4, GL_UNSIGNED_INT, this->m_tileIndices);
+
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	static float recalcCounter = 0.0;
 	//if(recalcCounter > 5.0)
 	//{
-		memset(this->m_floorColors, 0, this->m_numVertices);
-		for(int i = 0; i < this->m_numVertices/3; i++)
+	int i = 0;
+		memset(this->m_floorColors, 0, this->m_numVertices*3);
+		for(i = 0; i < this->m_numVertices; i++)
 		{
 			m_floorColors[(i*3)+1] = 255;
 		}
-
+		//printf("after reset - i = %i\n", i);
 		recalcCounter = 0.0;
-		for(int i = 0; i < _iploc->GetSize(); i++)
+		for(i = 0; i < _iploc->GetSize(); i++)
 		{
 #define GREEN_OFFSET 0
 			this->m_floorColors[this->m_tileIndices[(i*4)]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[i*4]*3], (int)fmin(255.0, _iploc->GetLoad(i)));
@@ -512,7 +514,7 @@ void HadoopDropper::RenderFloor()
 			//printf("%i, %lf\n", this->m_floorColors[this->m_tileIndices[i*4]*3], _iploc->GetLoad(i));
 			//printf("load = %lf\n", _iploc->GetLoad(i));
 		}
-
+		//printf("After calc - i = %i", i);
 	//}
 	//else
 	//	recalcCounter += getTime();

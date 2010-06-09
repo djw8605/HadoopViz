@@ -42,7 +42,7 @@ private:
     GLfloat* m_floorVertices;
     int m_numVertices;
     int m_numTiles;
-    GLubyte* m_tileIndices;
+    GLuint* m_tileIndices;
     GLubyte* m_floorColors;
 };
 

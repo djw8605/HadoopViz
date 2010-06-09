@@ -249,7 +249,7 @@ void DisplayReshape() {
 			font = new freetype::font_data;
 			stringstream ss;
 			ss << dataDir << "/fonts/Test.ttf";
-			font->init(ss.str().c_str(), 16);
+			font->init("FreeType/Test.ttf", 16);
 		} catch (std::exception &e) {
 			printf("%s\n", e.what());
 		}
