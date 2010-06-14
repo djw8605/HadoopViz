@@ -10,6 +10,7 @@
 #include <cmath>
 
 #include "IPandLoc.h"
+#include "GlobalStats.h"
 #define EXP_DECAY 0.985
 #define EVENTTIMEOUT 60
 
@@ -18,6 +19,7 @@ IPandLoc::IPandLoc() : m_stats(EVENTTIMEOUT)
     // TODO Auto-generated constructor stub
     m_ip = 0;
     this->m_load = 0.0;
+
 }
 
 IPandLoc::~IPandLoc()
@@ -46,6 +48,7 @@ IPandLoc::IPandLoc(const IPandLoc& rhs): m_stats(EVENTTIMEOUT)
 
             m_stats = rhs.m_stats;
 
+
 }
 
 
@@ -65,6 +68,16 @@ bool IPandLoc::operator==(const IPandLoc &other) const
 {
 
     if(strcmp(other.m_ip, m_ip) == 0)
+        return true;
+    else
+        return false;
+
+}
+
+bool IPandLoc::operator==(const char *other) const
+{
+
+    if(strcmp(other, m_ip) == 0)
         return true;
     else
         return false;
@@ -115,6 +128,7 @@ void IPandLoc::AddLoad(float amount)
 {
 
 	this->m_stats.AddEvent((double)amount);
+	_stats->SetLoad(this->m_stats.GetLoad());
 //	this->m_load = fmin(510.0, m_load+3*amount);
 
 	//if(this->m_load > 500)

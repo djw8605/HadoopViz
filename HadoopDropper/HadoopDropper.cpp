@@ -20,6 +20,7 @@
 #include "HadoopDropper/IPtoLocation.h"
 #include "HadoopDropper/SelectionDisplay.h"
 #include "display.h"
+#include "GlobalStats.h"
 
 
 #include <stdio.h>
@@ -497,20 +498,29 @@ void HadoopDropper::RenderFloor()
 		}
 		//printf("after reset - i = %i\n", i);
 		recalcCounter = 0.0;
+
+		// Get the max load for normalization
+		double max_load = 0.0;
+		for(i = 0; i < _iploc->GetSize(); i++)
+			if (_iploc->GetLoad(i) > max_load)
+				max_load = _iploc->GetLoad(i);
+
 		for(i = 0; i < _iploc->GetSize(); i++)
 		{
 #define GREEN_OFFSET 0
-			this->m_floorColors[this->m_tileIndices[(i*4)]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[i*4]*3], (int)fmin(255.0, _iploc->GetLoad(i)));
-			this->m_floorColors[this->m_tileIndices[(i*4)]*3+1] = (unsigned char)min((int)this->m_floorColors[this->m_tileIndices[i*4]*3+1], 255 - (int)fmax(0.0, _iploc->GetLoad(i)-255.0));
+			float load = _iploc->GetLoad(i);
+			float color_load = ( load / max_load) * 510;
+			this->m_floorColors[this->m_tileIndices[(i*4)]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[i*4]*3], (int)fmin(255.0, color_load));
+			this->m_floorColors[this->m_tileIndices[(i*4)]*3+1] = (unsigned char)min((int)this->m_floorColors[this->m_tileIndices[i*4]*3+1], 255 - (int)fmax(0.0, color_load-255.0));
 
-			this->m_floorColors[this->m_tileIndices[(i*4)+1]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[(i*4)+1]*3], (int)fmin(255.0, _iploc->GetLoad(i)));
-			this->m_floorColors[this->m_tileIndices[(i*4)+1]*3+1] = (unsigned char)min((int)this->m_floorColors[this->m_tileIndices[(i*4)+1]*3+1], 255 - (int)fmax(0.0, _iploc->GetLoad(i)-255.0));
+			this->m_floorColors[this->m_tileIndices[(i*4)+1]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[(i*4)+1]*3], (int)fmin(255.0, color_load));
+			this->m_floorColors[this->m_tileIndices[(i*4)+1]*3+1] = (unsigned char)min((int)this->m_floorColors[this->m_tileIndices[(i*4)+1]*3+1], 255 - (int)fmax(0.0, color_load-255.0));
 
-			this->m_floorColors[this->m_tileIndices[(i*4)+2]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[(i*4)+2]*3], (int)fmin(255.0, _iploc->GetLoad(i)));
-			this->m_floorColors[this->m_tileIndices[(i*4)+2]*3+1] = (unsigned char)min((int)this->m_floorColors[this->m_tileIndices[(i*4)+2]*3+1], 255 - (int)fmax(0.0, _iploc->GetLoad(i)-255.0));
+			this->m_floorColors[this->m_tileIndices[(i*4)+2]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[(i*4)+2]*3], (int)fmin(255.0, color_load));
+			this->m_floorColors[this->m_tileIndices[(i*4)+2]*3+1] = (unsigned char)min((int)this->m_floorColors[this->m_tileIndices[(i*4)+2]*3+1], 255 - (int)fmax(0.0, color_load-255.0));
 
-			this->m_floorColors[this->m_tileIndices[(i*4)+3]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[(i*4)+3]*3], (int)fmin(255.0, _iploc->GetLoad(i)));
-			this->m_floorColors[this->m_tileIndices[(i*4)+3]*3+1] = (unsigned char)min((int)this->m_floorColors[this->m_tileIndices[(i*4)+3]*3+1], 255 - (int)fmax(0.0, _iploc->GetLoad(i)-255.0));
+			this->m_floorColors[this->m_tileIndices[(i*4)+3]*3] = (unsigned char)max((int)this->m_floorColors[this->m_tileIndices[(i*4)+3]*3], (int)fmin(255.0, color_load));
+			this->m_floorColors[this->m_tileIndices[(i*4)+3]*3+1] = (unsigned char)min((int)this->m_floorColors[this->m_tileIndices[(i*4)+3]*3+1], 255 - (int)fmax(0.0, color_load-255.0));
 
 			//printf("%i, %lf\n", this->m_floorColors[this->m_tileIndices[i*4]*3], _iploc->GetLoad(i));
 			//printf("load = %lf\n", _iploc->GetLoad(i));

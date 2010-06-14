@@ -147,9 +147,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 TypeInfo bufsType = GetTypeInfo(buf+offset, endofType - buf);
                 /* Create and fill the data structure */
                 sd = new SingleDrop();
-                IPandLoc src = _iploc->GetByIP(bufsType.src, 1.0);
+                IPandLoc & src = _iploc->GetByIP(bufsType.src, 1.0);
                 //src.AddLoad(1.0);
-                IPandLoc dest = _iploc->GetByIP(bufsType.dest, 1.0);
+                IPandLoc & dest = _iploc->GetByIP(bufsType.dest, 1.0);
                 //dest.AddLoad(1.0);
 
                 sd->dest = dest.GetPoint(); //_iploc->GetLocation(bufsType.dest);
@@ -188,9 +188,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 float size;
                 sscanf(bufsType.extra, "%f", &size);
                 sd = new SingleDrop();
-                IPandLoc src = _iploc->GetByIP(bufsType.src, size);
+                IPandLoc & src = _iploc->GetByIP(bufsType.src, size);
 				//src.AddLoad(1.0);
-				IPandLoc dest = _iploc->GetByIP(bufsType.dest, size);
+				IPandLoc & dest = _iploc->GetByIP(bufsType.dest, size);
 				//dest.AddLoad(1.0);
 				//printf("%lf\n", dest.GetLoad());
 				sd->dest = dest.GetPoint(); //_iploc->GetLocation(bufsType.dest);
@@ -207,7 +207,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 				}
 				sd->scale = max(min((double)((float)size/((float)size + max_size)), 0.8), 0.2);
 				if ( (sd->scale > 1.0) || (sd->scale < 0.0))
-					printf("scale = %lf, size = %f, max_size = %i\n", sd->scale, size, max_size);
+					printf("scale = %lf, size = %f, max_size = %lf\n", sd->scale, size, max_size);
                 //sd->scale = ((float)rand() / RAND_MAX)*1.0+3;
                 //printf("scale: %lf", sd->scale);
                 //sd->scale = 3;
@@ -231,7 +231,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 
                 /* Create and fill the data structure */
                 sd = new SingleDrop();
-                IPandLoc dest = _iploc->GetByIP(bufsType.src, 1.0);
+                IPandLoc & dest = _iploc->GetByIP(bufsType.src, 1.0);
                 //sd->dest = _iploc->GetLocation(bufsType.src);
                 sd->dest = dest.GetPoint();
                 point p;
@@ -265,7 +265,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 /* Create and fill the data structure */
                 sd = new SingleDrop();
                 //sd->src = _iploc->GetLocation(bufsType.src);
-                IPandLoc src = _iploc->GetByIP(bufsType.src, 1.0);
+                IPandLoc & src = _iploc->GetByIP(bufsType.src, 1.0);
                 sd->src = src.GetPoint();
                 point p;
                 p.x = sd->src.x;

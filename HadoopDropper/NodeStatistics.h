@@ -8,7 +8,7 @@
 #ifndef NODESTATISTICS_H_
 #define NODESTATISTICS_H_
 
-#include <list>
+#include <vector>
 
 struct event_time
 {
@@ -21,6 +21,7 @@ class NodeStatistics
 {
 public:
 	NodeStatistics(int timeout);
+	NodeStatistics(const NodeStatistics& ns);
 	virtual ~NodeStatistics();
 
 	void AddEvent(double load);
@@ -29,8 +30,11 @@ public:
 	void UpdateEvents();
 
 private:
-	std::list<event_time> m_events;
+	std::vector<event_time> m_events;
 	int m_timeout;
+	double m_lastload;
+	bool m_recalcload;
+	time_t m_lasttime;
 
 };
 

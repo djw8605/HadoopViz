@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = -I m4
 bin_PROGRAMS = hadoopviz
 
-hadoopviz_LDFLAGS = $(SDL_LIBS) $(FT2_LIBS) $(MAC_LIBS) $(OPENGL_LIBS)
+hadoopviz_LDFLAGS = $(SDL_LIBS) $(FT2_LIBS) $(MAC_LIBS) $(OPENGL_LIBS) 
 
 hadoopviz_SOURCES = \
 display.cpp \
@@ -28,6 +28,7 @@ HadoopDropper/IPtoLocation.cpp \
 HadoopDropper/SelectionDisplay.cpp \
 HadoopDropper/SingleDrop.cpp \
 HadoopDropper/NodeStatistics.cpp \
+HadoopDropper/GlobalStats.cpp \
 Math/Math.cpp \
 TextureLoader/CTargaImage.cpp \
 AbstractScene/AbstractScene.h \
@@ -42,6 +43,7 @@ HadoopDropper/IPtoLocation.h \
 HadoopDropper/SelectionDisplay.h \
 HadoopDropper/SingleDrop.h \
 HadoopDropper/NodeStatistics.h \
+HadoopDropper/GlobalStats.h \
 Math/Math.h \
 TextureLoader/CTargaImage.h \
 defaults.h

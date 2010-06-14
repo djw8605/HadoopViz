@@ -47,21 +47,7 @@ IPtoLocation* IPtoLocation::GetInstance()
 point IPtoLocation::GetLocation(char* ip)
 {
 
-    IPandLoc iploc(ip);
-    std::vector<IPandLoc>::iterator i;
-    i = find(ips.begin(), ips.end(), iploc);
-    //printf("after find\n");
-    if (i == ips.end())
-    {
-
-        AddIP(ip);
-        //printf("adding ip\n");
-        return ips.back().GetPoint();
-
-    } else
-        return (*i).GetPoint();
-
-
+    return this->GetByIP(ip).GetPoint();
 
 
 }
@@ -121,7 +107,7 @@ void IPtoLocation::ExpDecayLoads()
 
 }
 
-IPandLoc IPtoLocation::GetInfo(unsigned int position)
+IPandLoc& IPtoLocation::GetInfo(unsigned int position)
 {
 	return ips[position];
 
@@ -138,7 +124,19 @@ float IPtoLocation::GetLoad(unsigned int position)
 IPandLoc& IPtoLocation::GetByIP(char* ip)
 {
 
-	IPandLoc iploc(ip);
+
+	for (int i = 0; i < ips.size(); i++)
+	{
+		if(strcmp(ips[i].GetIP(), ip) == 0)
+		{
+			return ips[i];
+		}
+	}
+
+	// If you get to this point, you haven't found anything.
+	AddIP(ip);
+	return ips.back();
+/*
 	    std::vector<IPandLoc>::iterator i;
 	    i = find(ips.begin(), ips.end(), iploc);
 	    //printf("after find\n");
@@ -152,28 +150,15 @@ IPandLoc& IPtoLocation::GetByIP(char* ip)
 	    } else
 	        return (*i);
 
-
+*/
 }
 
 IPandLoc& IPtoLocation::GetByIP(char* ip, float load_mod)
 {
-	IPandLoc iploc(ip);
-		    std::vector<IPandLoc>::iterator i;
-		    i = find(ips.begin(), ips.end(), iploc);
-		    //printf("after find\n");
-		    if (i == ips.end())
-		    {
 
-		        AddIP(ip);
-		        //printf("adding ip\n");
-		        ips.back().AddLoad(load_mod);
-		        return ips.back();
-
-		    } else
-		    {
-		    	(*i).AddLoad(load_mod);
-		        return (*i);
-		    }
+	IPandLoc & iploc = this->GetByIP(ip);
+	iploc.AddLoad(load_mod);
+	return iploc;
 
 
 }

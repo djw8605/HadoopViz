@@ -28,6 +28,7 @@ public:
     //friend bool operator < (char &lhs, IPandLoc &rhs);
 
     bool operator==(const IPandLoc &other) const;
+    bool operator==(const char *other) const;
 
     point GetPoint() { return m_point; };
     char* GetIP() { return m_ip; };
