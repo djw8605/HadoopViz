@@ -19,6 +19,7 @@ public:
 
 	double GetMaxLoad();
 	void SetLoad(double load);
+	void UpdateStats();
 
 private:
 	double m_maxload;

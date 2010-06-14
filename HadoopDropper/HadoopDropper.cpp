@@ -57,6 +57,8 @@ void HadoopDropper::Render()
 
 
     _camera->positionCamera();
+    _stats->UpdateStats();
+
     glPushMatrix();
 
 
@@ -500,10 +502,7 @@ void HadoopDropper::RenderFloor()
 		recalcCounter = 0.0;
 
 		// Get the max load for normalization
-		double max_load = 0.0;
-		for(i = 0; i < _iploc->GetSize(); i++)
-			if (_iploc->GetLoad(i) > max_load)
-				max_load = _iploc->GetLoad(i);
+		double max_load = _stats->GetMaxLoad();
 
 		for(i = 0; i < _iploc->GetSize(); i++)
 		{
@@ -558,7 +557,7 @@ void HadoopDropper::RenderSelected()
 
 			//_seldisp->SetText(_iploc->GetIP(m_selectedIndex));
 			char buf[100];
-			sprintf(buf, "%s: %lf", _iploc->GetIP(m_selectedIndex), _iploc->GetLoad(m_selectedIndex));
+			sprintf(buf, "%s: %.2lf MB/s", _iploc->GetIP(m_selectedIndex), (_iploc->GetLoad(m_selectedIndex)/(1048576)));
 			_seldisp->SetText(buf);
 			//_seldisp->SetText(_iploc->GetLoad(m_selectedIndex));
 

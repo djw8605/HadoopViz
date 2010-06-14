@@ -134,7 +134,7 @@ void IPandLoc::AddLoad(float amount)
 {
 
 	this->m_stats.AddEvent((double)amount);
-	_stats->SetLoad(this->m_stats.GetLoad());
+	//_stats->SetLoad(this->m_stats.GetLoad());
 //	this->m_load = fmin(510.0, m_load+3*amount);
 
 	//if(this->m_load > 500)
