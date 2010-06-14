@@ -352,7 +352,7 @@ TypeInfo DropListener::GetTypeInfo(char* buf, int size)
     sscanf(formatted_buf, "%s %s %s %s", type, toReturn.src, toReturn.dest, toReturn.extra);
     //printf("type = %s, src_ip = %s, dst_ip = %s, extra = %s\n", type, src_ip, dst_ip, extra);
 
-
+    delete [] formatted_buf;
     return toReturn;
 
 
