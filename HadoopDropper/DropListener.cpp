@@ -171,9 +171,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 				sd->counter = 0;
 				sd->direction = ToVector(sd->src, sd->dest);
 
-                free(bufsType.dest);
-                free(bufsType.src);
-                free(bufsType.extra);
+                //free(bufsType.dest);
+                //free(bufsType.src);
+                //free(bufsType.extra);
                 //Normalize(sd->direction);
                 (*s).push_back(sd);
 
@@ -216,9 +216,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 sd->direction = ToVector(sd->src, sd->dest);
 
 
-                free(bufsType.dest);
-                free(bufsType.src);
-                free(bufsType.extra);
+                //free(bufsType.dest);
+                //free(bufsType.src);
+                //free(bufsType.extra);
                 (*s).push_back(sd);
                 //Normalize(sd->direction);
                 //printf("src: %lf, %lf, %lf\n", sd->direction.x, sd->direction.y, sd->direction.z);
@@ -251,9 +251,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 sd->direction = ToVector(sd->src, sd->dest);
 
                 //free(bufsType.dest);
-                free(bufsType.src);
-                free(bufsType.dest);
-                free(bufsType.extra);
+                //free(bufsType.src);
+                //free(bufsType.dest);
+                //free(bufsType.extra);
                 (*s).push_back(sd);
 
             }
@@ -286,9 +286,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
 
                 //free(bufsType.dest);
                 //printf("doing float: %s\n", bufsType.src);
-                free(bufsType.src);
-                free(bufsType.dest);
-                free(bufsType.extra);
+                //free(bufsType.src);
+                //free(bufsType.dest);
+                //free(bufsType.extra);
                 (*s).push_back(sd);
 
             }
@@ -349,52 +349,12 @@ TypeInfo DropListener::GetTypeInfo(char* buf, int size)
     char type[64], src_ip[64], dst_ip[64], extra[128];
 
     // Get the information.
-    sscanf(formatted_buf, "%s %s %s %s", type, src_ip, dst_ip, extra);
+    sscanf(formatted_buf, "%s %s %s %s", type, toReturn.src, toReturn.dest, toReturn.extra);
     //printf("type = %s, src_ip = %s, dst_ip = %s, extra = %s\n", type, src_ip, dst_ip, extra);
-    toReturn.src = new char[strlen(src_ip)];
-    strcpy(toReturn.src, src_ip);
-    toReturn.dest = new char[strlen(dst_ip)];
-    strcpy(toReturn.dest, dst_ip);
-    toReturn.extra = new char[strlen(extra)];
-    strcpy(toReturn.extra, extra);
-
-    return toReturn;
-
-    // Get the first ip, the string after the first space
-    char* firstIP = strchr(buf, ' ') + 1;
-    int nfirstIP = strchr(firstIP, ' ') - firstIP;
-    toReturn.src = (char*) malloc(nfirstIP + 1);
-    memcpy(toReturn.src, firstIP, nfirstIP);
-    toReturn.src[nfirstIP] = '\0';
-
-    // Check if there is a second IP
-    if (((nfirstIP + firstIP) - buf) == size)
-    {
-
-        printf("%s\n%s\n", buf, toReturn.src);
-
-        printf("there is only 1 IP\n");
-        toReturn.dest = 0;
-
-    }
-    else
-    {
-
-        //second ip, after the second space
-        char* secondIP = strchr(firstIP, ' ') + 1;
-        int nsecondIP = strchr(secondIP, '\n') - secondIP;
-        toReturn.dest = (char*) malloc(nsecondIP + 1);
-        memcpy(toReturn.dest, secondIP, nsecondIP);
-        toReturn.dest[nsecondIP] = '\0';
-    }
-    //printf("buf = %s\n", buf);
-    //printf("first:%i, second:%i\n", nfirstIP, nsecondIP);
-
-    //new char[nfirstIP] + 1;
-    //new char[nsecondIP] + 1;
 
 
     return toReturn;
+
 
 
 }

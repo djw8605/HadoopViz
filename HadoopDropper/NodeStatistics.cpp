@@ -19,7 +19,7 @@ NodeStatistics::NodeStatistics(int timeout)
 
 	this->SetTimeout(timeout);
 	this->m_recalcload = true;
-	printf("Inside create\n");
+
 
 
 }
@@ -30,9 +30,26 @@ NodeStatistics::NodeStatistics(const NodeStatistics& ns)
 	this->m_lastload = ns.m_lastload;
 	this->m_recalcload = ns.m_recalcload;
 	this->m_timeout = ns.m_timeout;
-	//printf("Inside copy\n");
+
 
 }
+
+NodeStatistics & NodeStatistics::operator=(const NodeStatistics &rhs)
+{
+
+    if ( this != &rhs)
+    {
+        this->m_events = rhs.m_events;
+        this->m_lastload = rhs.m_lastload;
+        this->m_recalcload = rhs.m_recalcload;
+        this->m_timeout = rhs.m_timeout;
+
+    }
+    return *this;
+
+
+}
+
 
 
 NodeStatistics::~NodeStatistics()

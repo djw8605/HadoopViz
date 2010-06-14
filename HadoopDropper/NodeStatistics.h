@@ -23,6 +23,7 @@ class NodeStatistics
 public:
 	NodeStatistics(int timeout);
 	NodeStatistics(const NodeStatistics& ns);
+	NodeStatistics& operator=(const NodeStatistics &rhs);
 	virtual ~NodeStatistics();
 
 	void AddEvent(double load);

@@ -18,9 +18,9 @@
 
 struct TypeInfo
 {
-    char* src;
-    char* dest;
-    char* extra;
+    char src[64];
+    char dest[64];
+    char extra[64];
 
 };
 

@@ -20,6 +20,7 @@ IPandLoc::IPandLoc() : m_stats(EVENTTIMEOUT)
     m_ip = 0;
     this->m_load = 0.0;
 
+
 }
 
 IPandLoc::~IPandLoc()
@@ -28,6 +29,8 @@ IPandLoc::~IPandLoc()
     if(m_ip)
         delete m_ip;
 
+
+
 }
 
 IPandLoc::IPandLoc(char* ip):  m_stats(EVENTTIMEOUT)
@@ -35,6 +38,7 @@ IPandLoc::IPandLoc(char* ip):  m_stats(EVENTTIMEOUT)
     m_ip = new char[strlen(ip)+1];
     strcpy(m_ip, ip);
     this->m_load = 0.0;
+
 
 }
 
@@ -49,6 +53,7 @@ IPandLoc::IPandLoc(const IPandLoc& rhs): m_stats(EVENTTIMEOUT)
             m_stats = rhs.m_stats;
 
 
+
 }
 
 
@@ -59,6 +64,7 @@ IPandLoc::IPandLoc(char* ip, point p): m_stats(EVENTTIMEOUT)
 
     m_point = p;
     this->m_load = 0.0;
+
 
 
 }
