@@ -11,8 +11,9 @@
 
 #include "IPandLoc.h"
 #define EXP_DECAY 0.985
+#define EVENTTIMEOUT 60
 
-IPandLoc::IPandLoc()
+IPandLoc::IPandLoc() : m_stats(EVENTTIMEOUT)
 {
     // TODO Auto-generated constructor stub
     m_ip = 0;
@@ -27,7 +28,7 @@ IPandLoc::~IPandLoc()
 
 }
 
-IPandLoc::IPandLoc(char* ip)
+IPandLoc::IPandLoc(char* ip):  m_stats(EVENTTIMEOUT)
 {
     m_ip = new char[strlen(ip)+1];
     strcpy(m_ip, ip);
@@ -35,7 +36,7 @@ IPandLoc::IPandLoc(char* ip)
 
 }
 
-IPandLoc::IPandLoc(const IPandLoc& rhs)
+IPandLoc::IPandLoc(const IPandLoc& rhs): m_stats(EVENTTIMEOUT)
 {
             m_ip = new char[strlen(rhs.m_ip) + 1];
             strcpy(m_ip, rhs.m_ip);
@@ -43,10 +44,12 @@ IPandLoc::IPandLoc(const IPandLoc& rhs)
             m_point = rhs.m_point;
             m_load = rhs.m_load;
 
+            m_stats = rhs.m_stats;
+
 }
 
 
-IPandLoc::IPandLoc(char* ip, point p)
+IPandLoc::IPandLoc(char* ip, point p): m_stats(EVENTTIMEOUT)
 {
     m_ip = new char[strlen(ip)+1];
     strcpy(m_ip, ip);
@@ -93,6 +96,8 @@ IPandLoc & IPandLoc::operator=(const IPandLoc &rhs)
         m_point = rhs.m_point;
         m_load = rhs.m_load;
 
+        m_stats = rhs.m_stats;
+
     }
     return *this;
 
@@ -109,10 +114,21 @@ void IPandLoc::ExpDecayLoad()
 void IPandLoc::AddLoad(float amount)
 {
 
-	this->m_load = fmin(510.0, m_load+3*amount);
+	this->m_stats.AddEvent((double)amount);
+//	this->m_load = fmin(510.0, m_load+3*amount);
 
 	//if(this->m_load > 500)
 		//printf("%lf += %lf\n", this->m_load, amount);
 	//printf("adding %lf\n", amount);
 }
+
+float IPandLoc::GetLoad()
+{
+
+	return this->m_stats.GetLoad();
+
+
+}
+
+
 

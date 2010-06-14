@@ -188,9 +188,9 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 float size;
                 sscanf(bufsType.extra, "%f", &size);
                 sd = new SingleDrop();
-                IPandLoc src = _iploc->GetByIP(bufsType.src, 5.0*((float)max_size/(float)size));
+                IPandLoc src = _iploc->GetByIP(bufsType.src, size);
 				//src.AddLoad(1.0);
-				IPandLoc dest = _iploc->GetByIP(bufsType.dest, 5.0*((float)max_size/(float)size));
+				IPandLoc dest = _iploc->GetByIP(bufsType.dest, size);
 				//dest.AddLoad(1.0);
 				//printf("%lf\n", dest.GetLoad());
 				sd->dest = dest.GetPoint(); //_iploc->GetLocation(bufsType.dest);

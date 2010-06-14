@@ -9,6 +9,7 @@
 #define IPANDLOC_H_
 
 #include "Math/Math.h"
+#include "HadoopDropper/NodeStatistics.h"
 
 class IPandLoc
 {
@@ -31,7 +32,7 @@ public:
     point GetPoint() { return m_point; };
     char* GetIP() { return m_ip; };
 
-    float GetLoad() { return m_load; };
+    float GetLoad();
     void AddLoad(float amount);
     void ExpDecayLoad();
 
@@ -40,6 +41,7 @@ private:
     point m_point;
     char* m_ip;
     float m_load;
+    NodeStatistics m_stats;
 
 
 };

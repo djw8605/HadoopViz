@@ -63,7 +63,8 @@ am_hadoopviz_OBJECTS = display.$(OBJEXT) events.$(OBJEXT) \
 	HadoopDropper/IPandLoc.$(OBJEXT) \
 	HadoopDropper/IPtoLocation.$(OBJEXT) \
 	HadoopDropper/SelectionDisplay.$(OBJEXT) \
-	HadoopDropper/SingleDrop.$(OBJEXT) Math/Math.$(OBJEXT) \
+	HadoopDropper/SingleDrop.$(OBJEXT) \
+	HadoopDropper/NodeStatistics.$(OBJEXT) Math/Math.$(OBJEXT) \
 	TextureLoader/CTargaImage.$(OBJEXT)
 hadoopviz_OBJECTS = $(am_hadoopviz_OBJECTS)
 hadoopviz_LDADD = $(LDADD)
@@ -206,7 +207,7 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_CPPFLAGS = $(SDL_CFLAGS) $(FT2_CFLAGS) -DNO_AUDIO
+AM_CPPFLAGS = $(SDL_CFLAGS) $(FT2_CFLAGS) -DNO_AUDIO -g
 AUTOMAKE_OPTIONS = subdir-objects
 ACLOCAL_AMFLAGS = -I m4
 hadoopviz_LDFLAGS = $(SDL_LIBS) $(FT2_LIBS) $(MAC_LIBS) $(OPENGL_LIBS)
@@ -229,6 +230,7 @@ HadoopDropper/IPandLoc.cpp \
 HadoopDropper/IPtoLocation.cpp \
 HadoopDropper/SelectionDisplay.cpp \
 HadoopDropper/SingleDrop.cpp \
+HadoopDropper/NodeStatistics.cpp \
 Math/Math.cpp \
 TextureLoader/CTargaImage.cpp \
 AbstractScene/AbstractScene.h \
@@ -242,6 +244,7 @@ HadoopDropper/IPandLoc.h \
 HadoopDropper/IPtoLocation.h \
 HadoopDropper/SelectionDisplay.h \
 HadoopDropper/SingleDrop.h \
+HadoopDropper/NodeStatistics.h \
 Math/Math.h \
 TextureLoader/CTargaImage.h \
 defaults.h
@@ -377,6 +380,8 @@ HadoopDropper/SelectionDisplay.$(OBJEXT):  \
 	HadoopDropper/$(DEPDIR)/$(am__dirstamp)
 HadoopDropper/SingleDrop.$(OBJEXT): HadoopDropper/$(am__dirstamp) \
 	HadoopDropper/$(DEPDIR)/$(am__dirstamp)
+HadoopDropper/NodeStatistics.$(OBJEXT): HadoopDropper/$(am__dirstamp) \
+	HadoopDropper/$(DEPDIR)/$(am__dirstamp)
 Math/$(am__dirstamp):
 	@$(MKDIR_P) Math
 	@: > Math/$(am__dirstamp)
@@ -408,6 +413,7 @@ mostlyclean-compile:
 	-rm -f HadoopDropper/HadoopDropper.$(OBJEXT)
 	-rm -f HadoopDropper/IPandLoc.$(OBJEXT)
 	-rm -f HadoopDropper/IPtoLocation.$(OBJEXT)
+	-rm -f HadoopDropper/NodeStatistics.$(OBJEXT)
 	-rm -f HadoopDropper/SelectionDisplay.$(OBJEXT)
 	-rm -f HadoopDropper/SingleDrop.$(OBJEXT)
 	-rm -f Math/Math.$(OBJEXT)
@@ -429,6 +435,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/HadoopDropper.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/IPandLoc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/IPtoLocation.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/NodeStatistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/SelectionDisplay.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/SingleDrop.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@Math/$(DEPDIR)/Math.Po@am__quote@

@@ -194,7 +194,7 @@ void HadoopDropper::Init()
 
     /* COLOR ARRAY (floor) */
     this->m_floorColors = new GLubyte[this->m_numVertices*3];
-    for(int i = 0; i < this->m_numVertices*3; i++)
+    for(int i = 0; i < this->m_numVertices; i++)
     {
     	this->m_floorColors[i*3] = 0;
     	this->m_floorColors[i*3+1] = 255;
@@ -454,6 +454,7 @@ void HadoopDropper::RenderFloor()
     	/* Move the camera's center */
     	float buf[3];
     	_camera->GetPosition(buf);
+    	//printf("%lf, %lf, %lf\n", buf[0], buf[1], buf[2]);
     	_camera->SetCameraLocation(buf[0], buf[1], buf[2], (m_floorpoints[2].x - m_floorpoints[0].x)/2, (m_floorpoints[2].y - m_floorpoints[0].y)/2,  10.0);
     	//printf("size = %i\n", this->m_floorSize);
     	//printf("resizing floor to: %i\n%i\n", m_floorSize, m_totalFloor);

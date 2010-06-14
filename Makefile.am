@@ -1,5 +1,5 @@
 
-AM_CPPFLAGS = $(SDL_CFLAGS) $(FT2_CFLAGS) -DNO_AUDIO
+AM_CPPFLAGS = $(SDL_CFLAGS) $(FT2_CFLAGS) -DNO_AUDIO -g
 
 AUTOMAKE_OPTIONS = subdir-objects
 
@@ -27,6 +27,7 @@ HadoopDropper/IPandLoc.cpp \
 HadoopDropper/IPtoLocation.cpp \
 HadoopDropper/SelectionDisplay.cpp \
 HadoopDropper/SingleDrop.cpp \
+HadoopDropper/NodeStatistics.cpp \
 Math/Math.cpp \
 TextureLoader/CTargaImage.cpp \
 AbstractScene/AbstractScene.h \
@@ -40,6 +41,7 @@ HadoopDropper/IPandLoc.h \
 HadoopDropper/IPtoLocation.h \
 HadoopDropper/SelectionDisplay.h \
 HadoopDropper/SingleDrop.h \
+HadoopDropper/NodeStatistics.h \
 Math/Math.h \
 TextureLoader/CTargaImage.h \
 defaults.h
