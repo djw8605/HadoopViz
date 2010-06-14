@@ -8,6 +8,8 @@
 #include "NodeStatistics.h"
 #include <vector>
 #include <ctime>
+#include <cstdio>
+
 
 using namespace std;
 

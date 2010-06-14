@@ -9,6 +9,7 @@
 #define NODESTATISTICS_H_
 
 #include <vector>
+#include <ctime>
 
 struct event_time
 {

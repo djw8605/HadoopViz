@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <vector>
 #include <cstdio>
+#include <cstring>
 
 #include "Math/Math.h"
 #include "IPtoLocation.h"
