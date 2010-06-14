@@ -346,7 +346,7 @@ TypeInfo DropListener::GetTypeInfo(char* buf, int size)
     char* formatted_buf = new char[size+1];
     strncpy(formatted_buf, buf, size);
     formatted_buf[size] = '\0';
-    char type[64], src_ip[64], dst_ip[64], extra[128];
+    char type[64];
 
     // Get the information.
     sscanf(formatted_buf, "%s %s %s %s", type, toReturn.src, toReturn.dest, toReturn.extra);
