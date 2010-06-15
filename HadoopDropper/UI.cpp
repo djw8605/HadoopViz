@@ -112,8 +112,18 @@ void UI::RenderColorBar()
 
 void UI::RenderTotalTransfer()
 {
-	glColor4f(0.0, 1.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 10, 980, "Total Transfers: %.2lf MB/s", _stats->GetSumLoad()/BYTES_PER_MEGABYTE);
+	static float update_counter = 1.0;
+	static double loadsum = _stats->GetSumLoad()/BYTES_PER_MEGABYTE;
+	update_counter += getTime();
+
+		glColor4f(0.0, 1.0, 0.0, 1.0);
+		freetype::print(*(GetFont()), 10, 980, "Total Transfers: %.2lf MB/s", loadsum);
+
+	if (update_counter > 0.1)
+	{
+		loadsum = _stats->GetSumLoad()/BYTES_PER_MEGABYTE;
+		update_counter = 0.0;
+	}
 
 }
 
