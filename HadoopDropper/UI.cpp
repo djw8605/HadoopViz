@@ -83,48 +83,58 @@ void UI::Deinitialize2d()
 
 void UI::RenderColorBar()
 {
-
-	// Render the bar
-	glPushMatrix();
-	glTranslatef(480.0, 40.0, 0.0);
-	glScalef(430.0, 20.0, 1.0);
-
-	glBegin(GL_QUADS);
-
-	glColor4f(0.0, 1.0, 0.0, 1.0);
-	glVertex2f(0.0, 0.0);
-	glVertex2f(0.0, 1.0);
-
-	glColor4f(1.0, 0.0, 0.0, 1.0);
-	glVertex2f(1.0, 1.0);
-	glVertex2f(1.0, 0.0);
-
-	glEnd();
-
-	// Put the little tick marks on the bar
-	int size = 0;
-	const double* loads = _stats->GetHostLoads(&size);
-	double maxload = _stats->GetMaxLoad();
-	glBegin(GL_LINES);
-	glColor4f(1.0, 1.0, 1.0, 1.0);
-	double tmpload = 0.0;
-	for (int i = 0; i < size; i++)
+	static float counter = 1.0;
+	static GLuint displaylist = glGenLists(1);
+	counter += getTime();
+	if (counter >= 0.1)
 	{
-		tmpload = loads[i]/maxload;
-		glVertex3d(tmpload, 0.00, 1.0);
-		glVertex3d(tmpload, 1.0001, 1.0);
+		counter = 0.0;
+		glNewList(displaylist, GL_COMPILE);
+		// Render the bar
+		glPushMatrix();
+		glTranslatef(400.0, 40.0, 0.0);
+		glScalef(530.0, 20.0, 1.0);
 
+		glBegin( GL_QUADS);
+
+		glColor4f(0.0, 1.0, 0.0, 1.0);
+		glVertex2f(0.0, 0.0);
+		glVertex2f(0.0, 1.0);
+
+		glColor4f(1.0, 0.0, 0.0, 1.0);
+		glVertex2f(1.0, 1.0);
+		glVertex2f(1.0, 0.0);
+
+		glEnd();
+
+		// Put the little tick marks on the bar
+		int size = 0;
+		const double* loads = _stats->GetHostLoads(&size);
+		double maxload = _stats->GetMaxLoad();
+		glBegin( GL_LINES);
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		double tmpload = 0.0;
+		for (int i = 0; i < size; i++)
+		{
+			tmpload = loads[i] / maxload;
+			glVertex3d(tmpload, 0.00, 1.0);
+			glVertex3d(tmpload, 1.00, 1.0);
+
+		}
+		glEnd();
+
+		glPopMatrix();
+
+		// Label the bar
+		glColor4f(0.0, 1.0, 0.0, 1.0);
+		freetype::print(*(GetFont()), 370, 10, "0.00");
+
+		glColor4f(1.0, 0.0, 0.0, 1.0);
+		freetype::print(*(GetFont()), 830, 10, "%.2lf MB/s",
+				_stats->GetMaxLoad() / BYTES_PER_MEGABYTE);
+		glEndList();
 	}
-	glEnd();
-
-	glPopMatrix();
-
-	// Label the bar
-	glColor4f(0.0, 1.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 450, 10, "0.00");
-
-	glColor4f(1.0, 0.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 830, 10, "%.2lf MB/s", _stats->GetMaxLoad()/BYTES_PER_MEGABYTE);
+	glCallList(displaylist);
 
 
 }

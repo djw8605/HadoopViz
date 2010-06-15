@@ -67,6 +67,26 @@ void IPtoLocation::AddIP(char* ip)
     //printf("%lf, %lf, %i\n", p.x, p.y, counter);
 
     counter+=SPACE_BETWEEN;
+
+    SortPoints();
+
+}
+
+
+void IPtoLocation::SortPoints()
+{
+
+	sort(ips.begin(), ips.end());
+	for(int i = 0; i < ips.size(); i++)
+	{
+		point p;
+		p.x = ((i*SPACE_BETWEEN) / AREA_SIZE) * SPACE_BETWEEN;
+		p.y = ((i*SPACE_BETWEEN) % AREA_SIZE);
+		p.z = 0;
+		ips[i].SetPoint(p);
+
+	}
+
 }
 
 

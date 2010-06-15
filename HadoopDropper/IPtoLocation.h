@@ -37,6 +37,7 @@ public:
 private:
 
     void AddIP(char* ip);
+    void SortPoints();
 
     std::vector<IPandLoc> ips;
 

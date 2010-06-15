@@ -23,7 +23,7 @@ public:
     IPandLoc & operator=(const IPandLoc &rhs);
     //IPandLoc & operator=(const char* rhs);
 
-    friend bool operator < (IPandLoc &lhs, IPandLoc &rhs);
+    friend bool operator < (const IPandLoc &lhs, const IPandLoc &rhs);
     //friend bool operator < (IPandLoc &lhs, char &rhs);
     //friend bool operator < (char &lhs, IPandLoc &rhs);
 
@@ -31,6 +31,7 @@ public:
     bool operator==(const char *other) const;
 
     point GetPoint() { return m_point; };
+    void SetPoint(point p);
     char* GetIP() { return m_ip; };
 
     float GetLoad();

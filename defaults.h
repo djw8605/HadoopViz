@@ -5,7 +5,7 @@
 #define FOV 45.0
 
 // Area of the surface
-#define AREA_SIZE 60
+#define AREA_SIZE 132
 
 // Space between hosts
 #define SPACE_BETWEEN 4

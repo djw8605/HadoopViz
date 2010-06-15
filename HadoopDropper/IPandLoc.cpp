@@ -92,7 +92,7 @@ bool IPandLoc::operator==(const char *other) const
 }
 
 
-bool operator < (IPandLoc &lhs, IPandLoc &rhs)
+bool operator < (const IPandLoc &lhs, const IPandLoc &rhs)
 {
 
     if(strcmp(lhs.m_ip, rhs.m_ip) < 0)
@@ -150,6 +150,15 @@ float IPandLoc::GetLoad()
 
 
 }
+
+
+void IPandLoc::SetPoint(point p)
+{
+	this->m_point = p;
+
+
+}
+
 
 
 
