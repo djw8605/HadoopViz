@@ -42,6 +42,9 @@ void UI::Render()
 	// Render the total transfer bar
 	RenderTotalTransfer();
 
+	// Render the Visualization Title
+	RenderTitle();
+
 	// Shutdown 2d Environment
 	Deinitialize2d();
 
@@ -83,8 +86,8 @@ void UI::RenderColorBar()
 
 	// Render the bar
 	glPushMatrix();
-	glTranslatef(500.0, 40.0, 0.0);
-	glScalef(450.0, 20.0, 0.0);
+	glTranslatef(480.0, 40.0, 0.0);
+	glScalef(430.0, 20.0, 1.0);
 
 	glBegin(GL_QUADS);
 
@@ -97,14 +100,31 @@ void UI::RenderColorBar()
 	glVertex2f(1.0, 0.0);
 
 	glEnd();
+
+	// Put the little tick marks on the bar
+	int size = 0;
+	const double* loads = _stats->GetHostLoads(&size);
+	double maxload = _stats->GetMaxLoad();
+	glBegin(GL_LINES);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+	double tmpload = 0.0;
+	for (int i = 0; i < size; i++)
+	{
+		tmpload = loads[i]/maxload;
+		glVertex3d(tmpload, 0.00, 1.0);
+		glVertex3d(tmpload, 1.0001, 1.0);
+
+	}
+	glEnd();
+
 	glPopMatrix();
 
 	// Label the bar
 	glColor4f(0.0, 1.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 470, 10, "0.00");
+	freetype::print(*(GetFont()), 450, 10, "0.00");
 
 	glColor4f(1.0, 0.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 850, 10, "%.2lf MB/s", _stats->GetMaxLoad()/BYTES_PER_MEGABYTE);
+	freetype::print(*(GetFont()), 830, 10, "%.2lf MB/s", _stats->GetMaxLoad()/BYTES_PER_MEGABYTE);
 
 
 }
@@ -126,6 +146,18 @@ void UI::RenderTotalTransfer()
 	}
 
 }
+
+
+void UI::RenderTitle()
+{
+
+	glColor4f(1.0, 0.0, 0.0, 1.0);
+	freetype::print(*(GetFont()), 680, 980, "Live Intracluster Transfers");
+
+
+
+}
+
 
 
 

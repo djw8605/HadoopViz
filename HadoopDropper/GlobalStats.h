@@ -21,12 +21,16 @@ public:
 	double GetSumLoad();
 	void SetLoad(double load);
 	void UpdateStats();
+	const double* GetHostLoads(int * size);
 
 
 
 private:
 	double m_maxload;
 	double m_loadsum;
+
+	double* m_hostloads;
+	int m_hostloadsize;
 
 
 };

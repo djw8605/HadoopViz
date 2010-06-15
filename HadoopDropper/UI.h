@@ -26,6 +26,7 @@ private:
 	void Deinitialize2d();
 	void RenderColorBar();
 	void RenderTotalTransfer();
+	void RenderTitle();
 
 };
 
