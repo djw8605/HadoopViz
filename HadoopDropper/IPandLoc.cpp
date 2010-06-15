@@ -11,8 +11,9 @@
 
 #include "IPandLoc.h"
 #include "GlobalStats.h"
+#include "defaults.h"
 #define EXP_DECAY 0.985
-#define EVENTTIMEOUT 60
+
 
 IPandLoc::IPandLoc() : m_stats(EVENTTIMEOUT)
 {

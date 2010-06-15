@@ -7,6 +7,7 @@
 
 #include "GlobalStats.h"
 #include "IPtoLocation.h"
+#include "display.h"
 
 GlobalStats::GlobalStats()
 {
@@ -42,16 +43,22 @@ void GlobalStats::SetLoad(double load)
 void GlobalStats::UpdateStats()
 {
 	// Get the max current load
-	this->m_maxload = 0.0;
-	this->m_loadsum = 0.0;
-	double tmpload;
-	for (int i = 0; i < _iploc->GetSize(); i++)
+	static double load_counter = 0.0;
+	load_counter += getTime();
+	// Only calculate every 1/10th second.
+	if (load_counter > 0.1)
 	{
-		tmpload = _iploc->GetLoad(i);
-		if (tmpload > this->m_maxload)
-			this->m_maxload = tmpload;
+		this->m_maxload = 0.0;
+		this->m_loadsum = 0.0;
+		double tmpload;
+		for (int i = 0; i < _iploc->GetSize(); i++)
+		{
+			tmpload = _iploc->GetLoad(i);
+			if (tmpload > this->m_maxload)
+				this->m_maxload = tmpload;
 
-		this->m_loadsum += tmpload;
+			this->m_loadsum += tmpload;
+		}
 	}
 
 }
