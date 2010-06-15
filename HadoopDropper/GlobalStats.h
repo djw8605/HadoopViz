@@ -18,11 +18,15 @@ public:
 	static GlobalStats* GetInstance();
 
 	double GetMaxLoad();
+	double GetSumLoad();
 	void SetLoad(double load);
 	void UpdateStats();
 
+
+
 private:
 	double m_maxload;
+	double m_loadsum;
 
 
 };

@@ -39,6 +39,8 @@ void UI::Render()
 	// Render the color index bar
 	RenderColorBar();
 
+	// Render the total transfer bar
+	RenderTotalTransfer();
 
 	// Shutdown 2d Environment
 	Deinitialize2d();
@@ -98,9 +100,20 @@ void UI::RenderColorBar()
 	glPopMatrix();
 
 	// Label the bar
+	glColor4f(0.0, 1.0, 0.0, 1.0);
 	freetype::print(*(GetFont()), 470, 10, "0.00");
+
+	glColor4f(1.0, 0.0, 0.0, 1.0);
 	freetype::print(*(GetFont()), 870, 10, "%.2lf MB/s", _stats->GetMaxLoad()/BYTES_PER_MEGABYTE);
 
+
+}
+
+
+void UI::RenderTotalTransfer()
+{
+	glColor4f(0.0, 1.0, 0.0, 1.0);
+	freetype::print(*(GetFont()), 10, 980, "Total Transfers: %.2lf MB/s", _stats->GetSumLoad()/BYTES_PER_MEGABYTE);
 
 }
 

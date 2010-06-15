@@ -43,15 +43,29 @@ void GlobalStats::UpdateStats()
 {
 	// Get the max current load
 	this->m_maxload = 0.0;
+	this->m_loadsum = 0.0;
+	double tmpload;
 	for (int i = 0; i < _iploc->GetSize(); i++)
 	{
-		if (_iploc->GetLoad(i) > this->m_maxload)
-			this->m_maxload = _iploc->GetLoad(i);
+		tmpload = _iploc->GetLoad(i);
+		if (tmpload > this->m_maxload)
+			this->m_maxload = tmpload;
+
+		this->m_loadsum += tmpload;
 	}
 
+}
 
 
+double GlobalStats::GetSumLoad()
+{
+
+	return this->m_loadsum;
 
 }
+
+
+
+
 
 
