@@ -65,8 +65,8 @@ am_hadoopviz_OBJECTS = display.$(OBJEXT) events.$(OBJEXT) \
 	HadoopDropper/SelectionDisplay.$(OBJEXT) \
 	HadoopDropper/SingleDrop.$(OBJEXT) \
 	HadoopDropper/NodeStatistics.$(OBJEXT) \
-	HadoopDropper/GlobalStats.$(OBJEXT) Math/Math.$(OBJEXT) \
-	TextureLoader/CTargaImage.$(OBJEXT)
+	HadoopDropper/GlobalStats.$(OBJEXT) HadoopDropper/UI.$(OBJEXT) \
+	Math/Math.$(OBJEXT) TextureLoader/CTargaImage.$(OBJEXT)
 hadoopviz_OBJECTS = $(am_hadoopviz_OBJECTS)
 hadoopviz_LDADD = $(LDADD)
 hadoopviz_LINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
@@ -233,6 +233,7 @@ HadoopDropper/SelectionDisplay.cpp \
 HadoopDropper/SingleDrop.cpp \
 HadoopDropper/NodeStatistics.cpp \
 HadoopDropper/GlobalStats.cpp \
+HadoopDropper/UI.cpp \
 Math/Math.cpp \
 TextureLoader/CTargaImage.cpp \
 AbstractScene/AbstractScene.h \
@@ -248,6 +249,7 @@ HadoopDropper/SelectionDisplay.h \
 HadoopDropper/SingleDrop.h \
 HadoopDropper/NodeStatistics.h \
 HadoopDropper/GlobalStats.h \
+HadoopDropper/UI.h \
 Math/Math.h \
 TextureLoader/CTargaImage.h \
 defaults.h
@@ -387,6 +389,8 @@ HadoopDropper/NodeStatistics.$(OBJEXT): HadoopDropper/$(am__dirstamp) \
 	HadoopDropper/$(DEPDIR)/$(am__dirstamp)
 HadoopDropper/GlobalStats.$(OBJEXT): HadoopDropper/$(am__dirstamp) \
 	HadoopDropper/$(DEPDIR)/$(am__dirstamp)
+HadoopDropper/UI.$(OBJEXT): HadoopDropper/$(am__dirstamp) \
+	HadoopDropper/$(DEPDIR)/$(am__dirstamp)
 Math/$(am__dirstamp):
 	@$(MKDIR_P) Math
 	@: > Math/$(am__dirstamp)
@@ -422,6 +426,7 @@ mostlyclean-compile:
 	-rm -f HadoopDropper/NodeStatistics.$(OBJEXT)
 	-rm -f HadoopDropper/SelectionDisplay.$(OBJEXT)
 	-rm -f HadoopDropper/SingleDrop.$(OBJEXT)
+	-rm -f HadoopDropper/UI.$(OBJEXT)
 	-rm -f Math/Math.$(OBJEXT)
 	-rm -f TextureLoader/CTargaImage.$(OBJEXT)
 
@@ -445,6 +450,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/NodeStatistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/SelectionDisplay.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/SingleDrop.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@HadoopDropper/$(DEPDIR)/UI.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@Math/$(DEPDIR)/Math.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@TextureLoader/$(DEPDIR)/CTargaImage.Po@am__quote@
 

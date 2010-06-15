@@ -8,6 +8,7 @@
 #define SPACE_BETWEEN 4
 #define DROP_CREATION 40.0
 #define DROP_HEIGHT DROP_CREATION
+#define BYTES_PER_MEGABYTE 1048576.0
 
 
 /* Default Values */

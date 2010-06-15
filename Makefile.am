@@ -29,6 +29,7 @@ HadoopDropper/SelectionDisplay.cpp \
 HadoopDropper/SingleDrop.cpp \
 HadoopDropper/NodeStatistics.cpp \
 HadoopDropper/GlobalStats.cpp \
+HadoopDropper/UI.cpp \
 Math/Math.cpp \
 TextureLoader/CTargaImage.cpp \
 AbstractScene/AbstractScene.h \
@@ -44,6 +45,7 @@ HadoopDropper/SelectionDisplay.h \
 HadoopDropper/SingleDrop.h \
 HadoopDropper/NodeStatistics.h \
 HadoopDropper/GlobalStats.h \
+HadoopDropper/UI.h \
 Math/Math.h \
 TextureLoader/CTargaImage.h \
 defaults.h

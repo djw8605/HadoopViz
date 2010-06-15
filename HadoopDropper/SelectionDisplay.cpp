@@ -54,20 +54,19 @@ void SelectionDisplay::ClearText()
 }
 void SelectionDisplay::Render()
 {
-	if(!m_text)
+	if (!m_text)
 		return;
 
-	glMatrixMode(GL_PROJECTION);
-	    glPushMatrix();
-	    glLoadIdentity();
-	            GLint   viewport[4];
-	            glGetIntegerv(GL_VIEWPORT, viewport);
+	glMatrixMode( GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
 
-	            gluOrtho2D(0.0,1000.0,0.0,1000.0);
-	    glMatrixMode(GL_MODELVIEW);
-	    glPushMatrix();
-	    glLoadIdentity();
-
+	gluOrtho2D(0.0, 1000.0, 0.0, 1000.0);
+	glMatrixMode( GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
 
 	glPushMatrix();
 	glColor4f(1.0, 0.0, 0.0, 1.0);
@@ -77,11 +76,10 @@ void SelectionDisplay::Render()
 
 	glPopMatrix();
 
-	    glPopMatrix();
-	    glMatrixMode(GL_PROJECTION);
-	    glPopMatrix();
-	    glMatrixMode(GL_MODELVIEW);
-
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 
 }
 

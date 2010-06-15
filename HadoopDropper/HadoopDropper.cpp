@@ -21,6 +21,7 @@
 #include "HadoopDropper/SelectionDisplay.h"
 #include "display.h"
 #include "GlobalStats.h"
+#include "UI.h"
 
 
 #include <stdio.h>
@@ -74,6 +75,7 @@ void HadoopDropper::Render()
         _seldisp->Render();
     }
 
+    _ui->Render();
 
     glPopMatrix();
 
@@ -557,7 +559,7 @@ void HadoopDropper::RenderSelected()
 
 			//_seldisp->SetText(_iploc->GetIP(m_selectedIndex));
 			char buf[100];
-			sprintf(buf, "%s: %.2lf MB/s", _iploc->GetIP(m_selectedIndex), (_iploc->GetLoad(m_selectedIndex)/(1048576)));
+			sprintf(buf, "%s: %.2lf MB/s", _iploc->GetIP(m_selectedIndex), (_iploc->GetLoad(m_selectedIndex)/(BYTES_PER_MEGABYTE)));
 			_seldisp->SetText(buf);
 			//_seldisp->SetText(_iploc->GetLoad(m_selectedIndex));
 
