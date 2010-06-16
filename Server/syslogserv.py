@@ -271,7 +271,7 @@ class SysLogServ(object):
         self.gridftp = re.compile("GRIDFTP")
 
         #<134>06.01 14:00:41 [pool:w-cmsstor90-3@w-cmsstor90-3Domain:transfer] [000C00000000000005CE3D68,84644940] [Unknown] cms.resilient@enstore 84530321 61742 false {DCap-3.0,cmswn1897.fnal.gov:42811} [door:DCap0-cmsdcdr2-Unknown-1416285@dcap0-cmsdcdr2Domain:1275418779801-8854515] {0:""}
-        self.dcache_client = re.compile(".*pool:\w-([\w|\d]+).*\[[\w|\d]+,([\d]+).*DCap-[\d|\.]+,([\w|\d]+)")
+        self.dcache_client = re.compile(".*pool:\w-([\w|\d]+).*\[[\w|\d]+,([\d]+).*DCap-[\d|\.]+,([\w|\d|\.]+)")
         self.dcache_gridftp = re.compile(".*door:GFTP-([\w|\d]+).*Domain:(\w+)")
         self.dcache_transfer = re.compile(".*Buffer Sizes.*")
         
@@ -370,7 +370,27 @@ class SysLogServ(object):
         elif self.dcache_client.search(data):
             src,size,dest = self.dcache_client.search(data).groups()
             #print "Got client"
-            self.SendToConnected(self.connlist, "clienttrace", src, dest, size)
+            if self.hostnames.has_key(src):
+                prettySrc = self.hostnames[src]
+            else:
+               try:
+                       prettySrc = gethostbyaddr(src)[0]
+               except: 
+                       prettySrc = src
+               self.hostnames[src] = prettySrc
+               print "Adding %s as %s" % (src, prettySrc)
+
+            if self.hostnames.has_key(dest):
+                prettyDest = self.hostnames[dest]
+            else:
+               try:
+                       prettyDest = gethostbyaddr(dest)[0]
+               except: 
+                       prettyDest = dest
+               self.hostnames[dest] = prettyDest
+               print "Adding %s as %s" % (dest, prettyDest)
+            self.SendToConnected(self.connlist, "clienttrace", prettySrc, prettyDest, size)
+
 
         elif self.dcache_gridftp.search(data):
             #print "Got gridftp"
