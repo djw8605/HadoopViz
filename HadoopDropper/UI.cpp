@@ -127,6 +127,9 @@ void UI::RenderColorBar()
 
 		// Label the bar
 		glColor4f(0.0, 1.0, 0.0, 1.0);
+		freetype::print(*(GetFont()), 0, 10, "Distribution of transfer speeds");
+
+		glColor4f(0.0, 1.0, 0.0, 1.0);
 		freetype::print(*(GetFont()), 370, 10, "0.00");
 
 		glColor4f(1.0, 0.0, 0.0, 1.0);
@@ -147,7 +150,7 @@ void UI::RenderTotalTransfer()
 	update_counter += getTime();
 
 	glColor4f(0.0, 1.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 10, 980, "Total Transfers: %.2lf MB/s", loadsum);
+	freetype::print(*(GetFont()), 550, 980, "Total Data Transfers: %.2lf MB/s", loadsum);
 
 	if (update_counter > 0.1)
 	{
@@ -162,7 +165,7 @@ void UI::RenderTitle()
 {
 
 	glColor4f(1.0, 0.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 680, 980, "Live Intracluster Transfers");
+	freetype::print(*(GetFont()), 10, 980, "Live Intracluster Transfers");
 
 
 
