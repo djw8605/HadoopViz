@@ -165,7 +165,7 @@ void UI::RenderTitle()
 {
 
 	glColor4f(1.0, 0.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 10, 980, "Live Intracluster Transfers");
+	freetype::print(*(GetFont()), 10, 980, "Live CMS Tier 1 Transfers");
 
 
 
