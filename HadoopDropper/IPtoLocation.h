@@ -28,15 +28,15 @@ public:
 
     char* GetIP(unsigned int position);
     void ExpDecayLoads();
-    IPandLoc& GetInfo(unsigned int position);
+    IPandLoc & GetInfo(unsigned int position);
     float GetLoad(unsigned int position);
 
-    IPandLoc& GetByIP(char* ip);
-    IPandLoc& GetByIP(char* ip, float load_mod);
+    IPandLoc & GetByIP(char* ip);
+    IPandLoc & GetByIP(char* ip, float load_mod);
 
 private:
 
-    IPandLoc& AddIP(char* ip);
+    IPandLoc & AddIP(char* ip);
     void SortPoints();
 
     std::vector<IPandLoc> ips;

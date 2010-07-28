@@ -193,6 +193,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
                 IPandLoc & src = _iploc->GetByIP(bufsType.src, size);
 				//src.AddLoad(1.0);
 				IPandLoc & dest = _iploc->GetByIP(bufsType.dest, size);
+
 				//dest.AddLoad(1.0);
 				//printf("%lf\n", dest.GetLoad());
 				sd->dest = dest.GetPoint(); //_iploc->GetLocation(bufsType.dest);
