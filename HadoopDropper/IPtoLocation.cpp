@@ -54,7 +54,7 @@ point IPtoLocation::GetLocation(char* ip)
 }
 
 
-void IPtoLocation::AddIP(char* ip)
+IPandLoc& IPtoLocation::AddIP(char* ip)
 {
     static int counter = 0;
     /* initialize the point */
@@ -69,6 +69,7 @@ void IPtoLocation::AddIP(char* ip)
     counter+=SPACE_BETWEEN;
 
     SortPoints();
+    return GetByIP(ip);
 
 }
 
@@ -155,8 +156,8 @@ IPandLoc& IPtoLocation::GetByIP(char* ip)
 	}
 
 	// If you get to this point, you haven't found anything.
-	AddIP(ip);
-	return ips.back();
+	return AddIP(ip);
+	//return ips.back();
 /*
 	    std::vector<IPandLoc>::iterator i;
 	    i = find(ips.begin(), ips.end(), iploc);
