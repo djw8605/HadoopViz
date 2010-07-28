@@ -180,7 +180,7 @@ IPandLoc& IPtoLocation::GetByIP(char* ip, float load_mod)
 
 	IPandLoc & iploc = this->GetByIP(ip);
 	iploc.AddLoad(load_mod);
-	return iploc;
+	return GetByIP(ip);
 
 
 }
