@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 
 #include "Math/Math.h"
 #include "IPtoLocation.h"
@@ -26,7 +27,8 @@ using namespace std;
 IPtoLocation::IPtoLocation()
 {
     // TODO Auto-generated constructor stub
-
+	int surfaceSize = (int)pow(((double)AREA_SIZE / (double)SPACE_BETWEEN), 2);
+	ips.reserve(surfaceSize);
 
 }
 
