@@ -87,13 +87,13 @@ void HadoopDropper::Render()
     			this->m_selectedPoint->x, this->m_selectedPoint->y,
     			this->m_selectedPoint->z);
     			*/
-    	_camera->ModifyRotationRadius((30.0 - _camera->GetRotationRadius()) / 100.0);
+    	_camera->ModifyRotationRadius((30.0 - _camera->GetRotationRadius()) / 1000.0);
     }
     else
     {
     	//printf("%lf\n", (150.0 - _camera->GetRotationRadius()) / 100.0);
     	_camera->SetCameraLocation(buf[0], buf[1], buf[2] + (savedPos[2] - buf[2])/100.0, 0, 0,  0);
-    	_camera->ModifyRotationRadius((200.0 - _camera->GetRotationRadius()) / 100.0);
+    	_camera->ModifyRotationRadius((200.0 - _camera->GetRotationRadius()) / 1000.0);
 
     }
 

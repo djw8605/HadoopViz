@@ -144,7 +144,7 @@ void DropListener::GetDrops(deque<SingleDrop*>* s)
             //printf("src: %s, dest: %s\n", bufsType.src, bufsType.dest);
 
             /* Determine the type */
-            if(strncmp(buf+offset, "packet", 6) == 0)
+            if( (strncmp(buf+offset, "packet", 6) == 0) || (strncmp(buf+offset, "clienttrace", 11) == 0))
             {
             	//printf("Got Packet\n");
                 TypeInfo bufsType = GetTypeInfo(buf+offset, endofType - buf);
