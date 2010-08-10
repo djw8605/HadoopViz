@@ -127,7 +127,7 @@ void UI::RenderColorBar()
 
 		// Label the bar
 		glColor4f(0.0, 1.0, 0.0, 1.0);
-		freetype::print(*(GetFont()), 0, 10, "Distribution of transfer speeds");
+		freetype::print(*(GetFont()), 0, 10, "Distribution of transfer speeds:");
 
 		glColor4f(0.0, 1.0, 0.0, 1.0);
 		freetype::print(*(GetFont()), 370, 10, "0.00");
@@ -165,7 +165,7 @@ void UI::RenderTitle()
 {
 
 	glColor4f(1.0, 0.0, 0.0, 1.0);
-	freetype::print(*(GetFont()), 10, 980, "Live CMS Tier 1 Transfers");
+	freetype::print(*(GetFont()), 10, 980, "Live Hadoop Data Transfers");
 
 
 
