@@ -5,10 +5,12 @@
 #define FOV 45.0
 
 // Area of the surface
-#define AREA_SIZE 60
+//#define AREA_SIZE 200
+#define AREA_SIZE 80
 
 // Space between hosts
 #define SPACE_BETWEEN 4
+//#define SPACE_BETWEEN 2
 
 // Height the drop and floats
 #define DROP_CREATION 40.0
