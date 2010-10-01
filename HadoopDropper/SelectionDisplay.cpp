@@ -70,7 +70,7 @@ void SelectionDisplay::Render()
 
 	glPushMatrix();
 	glColor4f(1.0, 0.0, 0.0, 1.0);
-	glTranslatef(10.0, 10.0, 0.0);
+	glTranslatef(10.0, 30.0, 0.0);
 	freetype::print(*(GetFont()), 10, 10, m_text);
 	//printf("writing: %s", m_text);
 
