@@ -1,0 +1,28 @@
+HadoopViz README
+
+
+Hadoop Setup:
+In the log4j.properties, place:
+
+log4j.appender.SYSLOGM=org.apache.log4j.net.SyslogAppender
+log4j.appender.SYSLOGM.facility=local1
+log4j.appender.SYSLOGM.layout=org.apache.log4j.PatternLayout
+log4j.appender.SYSLOGM.layout.ConversionPattern=%p %c{2}: %m%n
+log4j.appender.SYSLOGM.SyslogHost=<server>:5679
+log4j.appender.SYSLOGM.threshold=INFO
+log4j.appender.SYSLOGM.FacilityPrinting=true
+log4j.appender.SYSLOGM.Header=true
+
+Be sure to replace the SyslogHost with the name of the server
+that will run the syslogserv.py.  
+
+
+
+
+
+
+
+
+
+
+
