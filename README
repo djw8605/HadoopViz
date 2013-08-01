@@ -13,6 +13,8 @@ log4j.appender.SYSLOGM.threshold=INFO
 log4j.appender.SYSLOGM.FacilityPrinting=true
 log4j.appender.SYSLOGM.Header=true
 
+log4j.logger.org.apache.hadoop.hdfs.server.datanode.DataNode=INFO,SYSLOGM
+
 Be sure to replace the SyslogHost with the name of the server
 that will run the syslogserv.py.  
 
