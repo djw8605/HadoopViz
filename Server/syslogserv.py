@@ -144,11 +144,11 @@ ONE_HOUR = datetime.timedelta(0, 3600)
 
 class GratiaRecordKeeper(object):
 
-    def __init__(self, probeConfig, per_minute=False):
+    def __init__(self, probeConfig, per_minute=True):
         if '/opt/vdt/gratia/probe/common' not in sys.path:
             sys.path.append('/opt/vdt/gratia/probe/common')
         global Gratia
-        Gratia = __import__("Gratia")
+        Gratia = __import__("gratia.common.Gratia").common.Gratia
         self.uploader = GratiaRecordUploader(probeConfig)
         self.uploader.run()
         self.default = {'protocol': 'hadoop', 'grid': 'OSG', 'duration': 0}
@@ -478,7 +478,8 @@ class SysLogServ(object):
 
 
     def SendToConnected(self, connlist, type="", src="", dest="", extra=None):
-        for con in connlist:
+        (readlist, writelist, exceptlist) = select([], connlist, [], 0)
+        for con in writelist:
             try:
                 if extra is None:
                     con.send("%s %s %s\n" % (type, src, dest))
